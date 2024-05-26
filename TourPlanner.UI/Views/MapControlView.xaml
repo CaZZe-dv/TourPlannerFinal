@@ -1,0 +1,87 @@
+﻿<UserControl x:Class="TourPlanner.UI.Views.MapControlView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TourPlanner.UI.Views"
+             xmlns:views="clr-namespace:TourPlanner.UI.Views"
+             xmlns:converter="clr-namespace:TourPlanner.UI.Converters" xmlns:loadingspinnercontrol="clr-namespace:LoadingSpinnerControl;assembly=LoadingSpinnerControl"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="600">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <converter:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter"/>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="4*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="4*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Orientation="Horizontal" >
+            <Button Content="General" FontSize="24" MinWidth="100"/>
+            <Button Content="Route" FontSize="24" MinWidth="100"/>
+            <Button Content="Misc" FontSize="24" MinWidth="100"/>
+        </StackPanel>
+        <Image Grid.Row="1" Source="../Images/example_map_view.png"/>
+        <views:ManageActionView Grid.Row="2"
+                                ManageActionViewText="Tour Logs"
+                                ButtonPlus="{Binding MapControlViewButtonPlus}"
+                                ButtonMinus="{Binding MapControlViewButtonMinus}"
+                                ButtonEdit="{Binding MapControlViewButtonEdit}"/>
+        <Grid Grid.Row="3" Margin="10,10,10,10" >
+            <Grid Visibility="{Binding TourIsChoosen, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <loadingspinnercontrol:LoadingSpinner Diameter="100" Thickness="5" IsLoading="{Binding IsLoadingTourLogs}" Color="Black" />
+                <ListView Visibility="{Binding IsLoading, Converter={StaticResource InverseBooleanToVisibilityConverter}}" ItemsSource="{Binding TourLogs}" SelectedItem="{Binding SelectedTourLog}">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Date Time">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding DateTime}"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Comment">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Comment}"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Difficulty">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Difficulty}"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Total Distance">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding TotalDistance}"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Total Time">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding TotalTime}"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Rating">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Rating}"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>
