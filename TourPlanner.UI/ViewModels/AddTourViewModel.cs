@@ -65,7 +65,7 @@ namespace TourPlanner.UI.ViewModels
         public ICommand CreateAddTourCommand { get; }
         public ICommand CancelAddTourCommand { get; }
 
-        public AddTourViewModel(TourPlannerManager tourPlannerManager, NavigationService navigationService)
+        public AddTourViewModel(TourPlannerRepository tourPlannerManager, NavigationService navigationService)
         {
             CreateAddTourCommand = new CreateAddTourCommand(this, tourPlannerManager, navigationService);
             CancelAddTourCommand = new CancelAddTourCommand(navigationService);

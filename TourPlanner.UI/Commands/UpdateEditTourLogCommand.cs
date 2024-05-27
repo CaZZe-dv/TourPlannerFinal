@@ -8,12 +8,12 @@ namespace TourPlanner.UI.Commands
 {
     public class UpdateEditTourLogCommand : AsyncCommandBase
     {
-        private readonly TourPlannerManager _tourPlannerManager;
+        private readonly TourPlannerRepository _tourPlannerManager;
         private readonly NavigationService _navigationService;
         private readonly SharedDataService _sharedDataService;
         private readonly EditTourLogViewModel _editTourLogViewModel;
 
-        public UpdateEditTourLogCommand(TourPlannerManager tourPlannerManager, NavigationService navigationService, EditTourLogViewModel editTourLogViewModel, SharedDataService sharedDataService)
+        public UpdateEditTourLogCommand(TourPlannerRepository tourPlannerManager, NavigationService navigationService, EditTourLogViewModel editTourLogViewModel, SharedDataService sharedDataService)
         {
             _tourPlannerManager = tourPlannerManager;
             _navigationService = navigationService;

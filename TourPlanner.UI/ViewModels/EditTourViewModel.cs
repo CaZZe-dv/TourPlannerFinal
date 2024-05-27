@@ -66,7 +66,7 @@ namespace TourPlanner.UI.ViewModels
         public ICommand UpdateEditTourCommand { get; }
         public ICommand CancelEditTourCommand { get; }
 
-        public EditTourViewModel(TourPlannerManager tourPlannerManager, NavigationService navigationService, SharedDataService sharedDataService)
+        public EditTourViewModel(TourPlannerRepository tourPlannerManager, NavigationService navigationService, SharedDataService sharedDataService)
         {
             Tour existingTour = sharedDataService.SelectedTour;
 

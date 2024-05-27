@@ -6,10 +6,10 @@ namespace TourPlanner.UI.Commands
 {
     public class RemoveTourCommand : AsyncCommandBase
     {
-        private readonly TourPlannerManager _tourPlannerManager;
+        private readonly TourPlannerRepository _tourPlannerManager;
         private readonly MainMenuViewModel _mainMenuViewModel;
 
-        public RemoveTourCommand(MainMenuViewModel mainMenuViewModel, TourPlannerManager tourPlannerManager)
+        public RemoveTourCommand(MainMenuViewModel mainMenuViewModel, TourPlannerRepository tourPlannerManager)
         {
             _mainMenuViewModel = mainMenuViewModel;
             _tourPlannerManager = tourPlannerManager;

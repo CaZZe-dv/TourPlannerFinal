@@ -9,11 +9,11 @@ namespace TourPlanner.UI.Commands
     public class CreateAddTourLogCommand : AsyncCommandBase
     {
         private readonly NavigationService _navigationService;
-        private readonly TourPlannerManager _tourPlannerManager;
+        private readonly TourPlannerRepository _tourPlannerManager;
         private readonly AddTourLogViewModel _addTourLogViewModel;
         private readonly SharedDataService _sharedDataService;
 
-        public CreateAddTourLogCommand(NavigationService navigationService, TourPlannerManager tourPlannerManager, AddTourLogViewModel addTourLogViewModel, SharedDataService sharedDataService)
+        public CreateAddTourLogCommand(NavigationService navigationService, TourPlannerRepository tourPlannerManager, AddTourLogViewModel addTourLogViewModel, SharedDataService sharedDataService)
         {
             _navigationService = navigationService;
             _tourPlannerManager = tourPlannerManager;

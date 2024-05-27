@@ -75,7 +75,7 @@ namespace TourPlanner.UI.ViewModels
         }
         public ICommand UpdateEditTourLogCommand { get; }
         public ICommand CancelEditTourLogCommand { get; }
-        public EditTourLogViewModel(TourPlannerManager tourPlannerManager, NavigationService navigationService, SharedDataService sharedDataService)
+        public EditTourLogViewModel(TourPlannerRepository tourPlannerManager, NavigationService navigationService, SharedDataService sharedDataService)
         {
             TourLog existingTourLog = sharedDataService.SelectedTourLog;
 

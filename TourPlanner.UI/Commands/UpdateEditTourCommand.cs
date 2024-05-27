@@ -9,11 +9,11 @@ namespace TourPlanner.UI.Commands
     public class UpdateEditTourCommand : AsyncCommandBase
     {
         private readonly NavigationService _navigationService;
-        private readonly TourPlannerManager _tourPlannerManager;
+        private readonly TourPlannerRepository _tourPlannerManager;
         private readonly EditTourViewModel _editTourViewModel;
         private readonly SharedDataService _sharedDataService;
 
-        public UpdateEditTourCommand(EditTourViewModel editTourViewModel, TourPlannerManager tourPlannerManager, NavigationService navigationService, SharedDataService sharedDataService)
+        public UpdateEditTourCommand(EditTourViewModel editTourViewModel, TourPlannerRepository tourPlannerManager, NavigationService navigationService, SharedDataService sharedDataService)
         {
             _editTourViewModel = editTourViewModel;
             _tourPlannerManager = tourPlannerManager;

@@ -2,6 +2,8 @@
 using Microsoft.Extensions.Configuration;
 using System.IO;
 using System.Windows;
+using System.Windows.Markup;
+using TourPlanner.BL.Services;
 using TourPlanner.DAL.DbContexts;
 using TourPlanner.DAL.Services;
 using TourPlanner.UI.Services;
@@ -17,8 +19,9 @@ namespace TourPlanner.UI
     {
         private readonly NavigationStore _navigationStore;
         private readonly SharedDataService _sharedDataService;
-        private readonly TourPlannerManager _tourPlannerManager;
+        private readonly TourPlannerRepository _tourPlannerManager;
         private readonly TourPlannerDbContextFactory _tourPlannerDbContextFactory;
+        
 
         public App()
         {
@@ -30,11 +33,24 @@ namespace TourPlanner.UI
 
             ITour tourHandler = new DatabaseTour(_tourPlannerDbContextFactory);
             ITourLog tourLogHandler = new DatabaseTourLog(_tourPlannerDbContextFactory);
+            IRouteService routeService = new RouteService(getApiStringFromConfigFile());
+            IMapService mapService = new MapService();
 
-            _tourPlannerManager = new TourPlannerManager(tourHandler, tourLogHandler);
+            _tourPlannerManager = new TourPlannerRepository(tourHandler, tourLogHandler, routeService, mapService);
         }
 
         private string getDbStringFromConfigFile()
+        {
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+
+            IConfiguration configuration = builder.Build();
+
+            return configuration.GetConnectionString("DefaultConnection");
+        }
+
+        private string getApiStringFromConfigFile()
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())

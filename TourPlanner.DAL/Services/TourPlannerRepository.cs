@@ -1,16 +1,21 @@
 ﻿using TourPlanner.BL.Models;
+using TourPlanner.BL.Services;
 
 namespace TourPlanner.DAL.Services
 {
-    public class TourPlannerManager
+    public class TourPlannerRepository
     {
         private readonly ITour _tourHandler;
         private readonly ITourLog _tourLogHandler;
+        private readonly IRouteService _routeService;
+        private readonly IMapService _mapService;
 
-        public TourPlannerManager(ITour tourHandler, ITourLog tourLogHandler)
+        public TourPlannerRepository(ITour tourHandler, ITourLog tourLogHandler, IRouteService routeService, IMapService mapService)
         {
             _tourHandler = tourHandler;
             _tourLogHandler = tourLogHandler;
+            _routeService = routeService;
+            _mapService = mapService;
         }
 
         public async Task<IEnumerable<Tour>> GetAllTours()

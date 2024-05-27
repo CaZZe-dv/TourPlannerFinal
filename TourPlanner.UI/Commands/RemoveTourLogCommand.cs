@@ -7,9 +7,9 @@ namespace TourPlanner.UI.Commands
     public class RemoveTourLogCommand : AsyncCommandBase
     {
         private readonly MainMenuViewModel _mainMenuViewModel;
-        private readonly TourPlannerManager _tourPlannerManager;
+        private readonly TourPlannerRepository _tourPlannerManager;
 
-        public RemoveTourLogCommand(MainMenuViewModel mainMenuViewModel, TourPlannerManager tourPlannerManager)
+        public RemoveTourLogCommand(MainMenuViewModel mainMenuViewModel, TourPlannerRepository tourPlannerManager)
         {
             _mainMenuViewModel = mainMenuViewModel;
             _tourPlannerManager = tourPlannerManager;

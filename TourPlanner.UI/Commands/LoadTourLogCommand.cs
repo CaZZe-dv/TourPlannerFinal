@@ -6,10 +6,10 @@ namespace TourPlanner.UI.Commands
 {
     public class LoadTourLogCommand : AsyncCommandBase
     {
-        private readonly TourPlannerManager _tourPlannerManager;
+        private readonly TourPlannerRepository _tourPlannerManager;
         private readonly MainMenuViewModel _mainMenuViewModel;
 
-        public LoadTourLogCommand(TourPlannerManager tourPlannerManager, MainMenuViewModel mainMenuViewModel)
+        public LoadTourLogCommand(TourPlannerRepository tourPlannerManager, MainMenuViewModel mainMenuViewModel)
         {
             _tourPlannerManager = tourPlannerManager;
             _mainMenuViewModel = mainMenuViewModel;

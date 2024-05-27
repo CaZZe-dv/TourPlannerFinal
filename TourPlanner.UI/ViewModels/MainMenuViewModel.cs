@@ -107,7 +107,7 @@ namespace TourPlanner.UI.ViewModels
             }
         }
 
-        public MainMenuViewModel(TourPlannerManager tourPlannerManager, NavigationService addTourNavigationService, NavigationService editTourNavigationService,
+        public MainMenuViewModel(TourPlannerRepository tourPlannerManager, NavigationService addTourNavigationService, NavigationService editTourNavigationService,
             NavigationService addTourLogNavigationService, NavigationService editTourLogNavigationService, SharedDataService sharedDataService)
         {
             _sharedDataService = sharedDataService;

@@ -10,8 +10,8 @@ namespace TourPlanner.UI.Commands
     {
         private readonly NavigationService _navigationService;
         private readonly AddTourViewModel _addTourViewModel;
-        private readonly TourPlannerManager _tourPlannerManager;
-        public CreateAddTourCommand(AddTourViewModel addTourViewModel, TourPlannerManager tourPlannerManager, NavigationService navigationService)
+        private readonly TourPlannerRepository _tourPlannerManager;
+        public CreateAddTourCommand(AddTourViewModel addTourViewModel, TourPlannerRepository tourPlannerManager, NavigationService navigationService)
         {
             _addTourViewModel = addTourViewModel;
             _navigationService = navigationService;
