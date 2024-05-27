@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using System.IO;
 using System.Windows;
 using TourPlanner.DAL.DbContexts;
 using TourPlanner.DAL.Services;
@@ -18,21 +20,31 @@ namespace TourPlanner.UI
         private readonly TourPlannerManager _tourPlannerManager;
         private readonly TourPlannerDbContextFactory _tourPlannerDbContextFactory;
 
-        private const string CONNECTION_STRING = "Host=localhost;Username=postgres;Password=12345;Database=TourPlannerDatabase";
-
         public App()
         {
             _navigationStore = new NavigationStore();
 
             _sharedDataService = new SharedDataService();
 
-            _tourPlannerDbContextFactory = new TourPlannerDbContextFactory(CONNECTION_STRING);
+            _tourPlannerDbContextFactory = new TourPlannerDbContextFactory(getDbStringFromConfigFile());
 
             ITour tourHandler = new DatabaseTour(_tourPlannerDbContextFactory);
             ITourLog tourLogHandler = new DatabaseTourLog(_tourPlannerDbContextFactory);
 
             _tourPlannerManager = new TourPlannerManager(tourHandler, tourLogHandler);
         }
+
+        private string getDbStringFromConfigFile()
+        {
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+
+            IConfiguration configuration = builder.Build();
+
+            return configuration.GetConnectionString("DefaultConnection");
+        }
+
         protected override void OnStartup(StartupEventArgs e)
         {
             using (TourPlannerDbContext dbContext = _tourPlannerDbContextFactory.CreateDbContext())
