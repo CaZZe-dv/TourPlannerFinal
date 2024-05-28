@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using System.IO;
 using System.Windows;
 using System.Windows.Markup;
@@ -9,6 +10,7 @@ using TourPlanner.DAL.Services;
 using TourPlanner.UI.Services;
 using TourPlanner.UI.Stores;
 using TourPlanner.UI.ViewModels;
+using TourPlanner.Utility.Logging;
 
 namespace TourPlanner.UI
 {
@@ -21,10 +23,17 @@ namespace TourPlanner.UI
         private readonly SharedDataService _sharedDataService;
         private readonly TourPlannerRepository _tourPlannerManager;
         private readonly TourPlannerDbContextFactory _tourPlannerDbContextFactory;
-        
+
+        private readonly ImageService _imageService;
+
+        //private static readonly ILoggerWrapper logger = Utility.Logging.LoggerFactory.GetLogger();
 
         public App()
         {
+            //logger.Info("massive error occurred");
+
+            _imageService = new ImageService(getImageDirectoryPathFromConfigFile());
+
             _navigationStore = new NavigationStore();
 
             _sharedDataService = new SharedDataService();
@@ -37,6 +46,17 @@ namespace TourPlanner.UI
             IMapService mapService = new MapService();
 
             _tourPlannerManager = new TourPlannerRepository(tourHandler, tourLogHandler, routeService, mapService);
+        }
+
+        private string getImageDirectoryPathFromConfigFile()
+        {
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+
+            IConfiguration configuration = builder.Build();
+
+            return configuration.GetSection("ImageDirectoryPath")["DefaultPath"];
         }
 
         private string getDbStringFromConfigFile()
@@ -58,7 +78,7 @@ namespace TourPlanner.UI
 
             IConfiguration configuration = builder.Build();
 
-            return configuration.GetConnectionString("DefaultConnection");
+            return configuration.GetSection("ApiKeys")["OpenRouteService"];
         }
 
         protected override void OnStartup(StartupEventArgs e)
