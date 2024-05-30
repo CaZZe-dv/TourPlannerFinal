@@ -1,4 +1,5 @@
 ﻿using System.Windows.Input;
+using System.Windows.Media.Imaging;
 using TourPlanner.BL.Models;
 using TourPlanner.DAL.Services;
 using TourPlanner.UI.Commands;
@@ -87,6 +88,39 @@ namespace TourPlanner.UI.ViewModels
             }
         }
 
+        private BitmapImage _editTourImage;
+        public BitmapImage EditTourImage
+        {
+            get => _editTourImage;
+            set
+            {
+                _editTourImage = value;
+                OnPropertyChanged(nameof(EditTourImage));
+            }
+        }
+
+        private bool _isTourChanged;
+        public bool IsTourChanged
+        {
+            get => _isTourChanged;
+            set
+            {
+                _isTourChanged = value;
+                OnPropertyChanged(nameof(IsTourChanged));
+            }
+        }
+
+        private bool _isRouteInformationFetched;
+        public bool IsRouteInformationFetched
+        {
+            get => _isRouteInformationFetched;
+            set
+            {
+                _isRouteInformationFetched = value;
+                OnPropertyChanged(nameof(IsRouteInformationFetched));
+            }
+        }
+
         public ICommand UpdateEditTourCommand { get; }
         public ICommand CancelEditTourCommand { get; }
 
@@ -94,6 +128,9 @@ namespace TourPlanner.UI.ViewModels
 
         public EditTourViewModel(TourPlannerRepository tourPlannerManager, NavigationService navigationService, SharedDataService sharedDataService)
         {
+            IsTourChanged = false;
+            IsRouteInformationFetched = true;
+
             Tour existingTour = sharedDataService.SelectedTour;
 
             _editTourName = existingTour.Name;

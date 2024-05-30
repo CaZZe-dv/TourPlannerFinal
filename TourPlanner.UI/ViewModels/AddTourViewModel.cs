@@ -101,6 +101,17 @@ namespace TourPlanner.UI.ViewModels
             }
         }
 
+        private bool _isRouteInformationFetched;
+        public bool IsRouteInformationFetched
+        {
+            get => _isRouteInformationFetched;
+            set
+            {
+                _isRouteInformationFetched = value;
+                OnPropertyChanged(nameof(IsRouteInformationFetched));
+            }
+        }
+
         public ICommand CreateAddTourCommand { get; }
         public ICommand CancelAddTourCommand { get; }
 

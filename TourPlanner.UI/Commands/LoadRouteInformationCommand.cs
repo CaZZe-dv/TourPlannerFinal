@@ -30,6 +30,7 @@ namespace TourPlanner.UI.Commands
                 e.PropertyName == nameof(_addTourViewModel.AddTourTransportType))
             {
                 OnCanExecuteChanged();
+                _addTourViewModel.IsRouteInformationFetched = false;
             }
         }
 
@@ -58,6 +59,7 @@ namespace TourPlanner.UI.Commands
                 _addTourViewModel.AddTourDistance = routeResponse.Distance.ToString();
                 _addTourViewModel.AddTourEstimatedTime = TimeSpan.FromMinutes(routeResponse.Duration).ToString();
                 //_addTourViewModel.AddTourImage = image;
+                _addTourViewModel.IsRouteInformationFetched = true;
                 return;
             }
             _addTourViewModel.AddTourFrom = string.Empty;

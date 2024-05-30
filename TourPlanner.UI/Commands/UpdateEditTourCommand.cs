@@ -28,7 +28,11 @@ namespace TourPlanner.UI.Commands
                 && !string.IsNullOrEmpty(_editTourViewModel.EditTourFrom)
                 && !string.IsNullOrEmpty(_editTourViewModel.EditTourTo)
                 && !string.IsNullOrEmpty(_editTourViewModel.EditTourDescription)
-                && !string.IsNullOrEmpty(_editTourViewModel.EditTourTransportType);
+                && !string.IsNullOrEmpty(_editTourViewModel.EditTourTransportType)
+                && !string.IsNullOrEmpty(_editTourViewModel.EditTourDistance)
+                && !string.IsNullOrEmpty(_editTourViewModel.EditTourEstimatedTime)
+                && _editTourViewModel.IsRouteInformationFetched
+                && _editTourViewModel.IsTourChanged;
         }
         private void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
@@ -36,9 +40,13 @@ namespace TourPlanner.UI.Commands
                 e.PropertyName == nameof(_editTourViewModel.EditTourFrom) ||
                 e.PropertyName == nameof(_editTourViewModel.EditTourTo) ||
                 e.PropertyName == nameof(_editTourViewModel.EditTourDescription) ||
-                e.PropertyName == nameof(_editTourViewModel.EditTourTransportType))
+                e.PropertyName == nameof(_editTourViewModel.EditTourTransportType) ||
+                e.PropertyName == nameof(_editTourViewModel.EditTourDistance) ||
+                e.PropertyName == nameof(_editTourViewModel.EditTourEstimatedTime) ||
+                e.PropertyName == nameof(_editTourViewModel.IsRouteInformationFetched))
             {
                 OnCanExecuteChanged();
+                _editTourViewModel.IsTourChanged = true;
             }
         }
 
@@ -50,8 +58,8 @@ namespace TourPlanner.UI.Commands
                 _editTourViewModel.EditTourFrom,
                 _editTourViewModel.EditTourTo,
                 _editTourViewModel.EditTourTransportType,
-                0,
-                TimeSpan.Zero,
+                float.Parse(_editTourViewModel.EditTourDistance),
+                TimeSpan.Parse(_editTourViewModel.EditTourEstimatedTime),
                 null);
             await _tourPlannerManager.UpdateTour(updatedTour);
             _navigationService.Navigate();
