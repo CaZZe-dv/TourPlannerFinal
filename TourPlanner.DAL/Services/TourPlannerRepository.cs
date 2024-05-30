@@ -17,6 +17,10 @@ namespace TourPlanner.DAL.Services
             _routeService = routeService;
             _mapService = mapService;
         }
+        public TourPlannerRepository(ITourLog tourLogHandler)
+        {
+            _tourLogHandler = tourLogHandler;
+        }
 
         public async Task<IEnumerable<Tour>> GetAllTours()
         {

@@ -134,7 +134,7 @@ namespace TourPlanner.UI.ViewModels
 
             //Report
             //_tourReportService = tourReportService;
-            MainMenuOptionsCommand = new GetOptionsCommand(this);
+            MainMenuOptionsCommand = new GetOptionsCommand(this, tourPlannerManager);
             //_tourReportService = tourReportService;
         }
 

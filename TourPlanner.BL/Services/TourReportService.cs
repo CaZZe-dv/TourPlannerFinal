@@ -1,4 +1,5 @@
-﻿using iText.Kernel.Pdf;
+﻿using iText.Commons.Actions.Contexts;
+using iText.Kernel.Pdf;
 using iText.Layout;
 using iText.Layout.Element;
 using System.Collections.Generic;
@@ -12,20 +13,18 @@ namespace TourPlanner.BL.Services
 {
     public class TourReportService
     {
-
-        private string fileplace = "C:\\Users\\nicib\\Documents\\FHTW\\4\\swen\\";
-        private string documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-
-
+        
+        private string filePath = "C:\\Users\\nicib\\Documents\\FHTW\\4\\swen\\";
+ 
         public async Task<string> GenerateReportForTour(Tour tour)
         {
-            string fileName = $"{fileplace}Report_{tour.Name.Replace(" ", "_")}.pdf";
+            string fileName = $"{filePath}Report_{tour.Name.Replace(" ", "_")}.pdf";
             await GeneratePdfForTour(tour, fileName);
             return fileName;
         }
         public async Task<string> GenerateReportTest(Tour tour)
         {
-            string fileName = $"{fileplace}Report_{tour.Name.Replace(" ", "_")}.pdf";
+            string fileName = $"{filePath}Report_{tour.Name.Replace(" ", "_")}.pdf";
             Debug.WriteLine(fileName);
             await GeneratePdfTest(tour, fileName);
             return fileName;
@@ -33,7 +32,7 @@ namespace TourPlanner.BL.Services
 
         public async Task<string> GenerateReportForAllTours()
         {
-            string fileName = $"{fileplace}Report_All_Tours.pdf";
+            string fileName = $"{filePath}Report_All_Tours.pdf";
             await GeneratePdfForAllTours(fileName);
             return fileName;
         }
@@ -51,15 +50,15 @@ namespace TourPlanner.BL.Services
                 document.Add(new Paragraph($"Estimated Time: {tour.EstimatedTime} hours"));
                 document.Add(new Paragraph($"Transport Type: {tour.TransportType}"));
 
-                var tourLogs = GetSampleTourLogs();
-                if (tourLogs.Count > 0)
-                {
+            var tourLogs = GetSampleTourLogs();
+            if (tourLogs != null)
+            {
                     document.Add(new Paragraph("\nTour Logs:").SetBold().SetFontSize(15));
                     foreach (var log in tourLogs)
                     {
                         document.Add(new Paragraph($"Date: {log.DateTime}, Duration: {log.TotalTime}, Rating: {log.Rating}, Comment: {log.Comment}"));
-                    }
-                }
+                    }            
+            }
 
                 document.Close();
                 Debug.WriteLine("einzeln");
