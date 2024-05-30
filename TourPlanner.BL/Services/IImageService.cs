@@ -7,8 +7,10 @@ using System.Windows.Media.Imaging;
 
 namespace TourPlanner.BL.Services
 {
-    public interface IMapService
+    public interface IImageService
     {
-        Task<BitmapSource?> GenerateMapAsync(string zoomStr, string start, string end);
+        Task<string> SaveImage(BitmapSource image, string tourId);
+        Task<BitmapSource> GetImage(string tourId);
+        Task RemoveImage(string tourId);
     }
 }

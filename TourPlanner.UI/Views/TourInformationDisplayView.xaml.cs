@@ -41,12 +41,12 @@ namespace TourPlanner.UI.Views
         public static readonly DependencyProperty ImageProperty =
             DependencyProperty.Register(
                 nameof(Image),
-                typeof(BitmapImage),
+                typeof(BitmapSource),
                 typeof(TourInformationDisplayView),
-                new PropertyMetadata(default(BitmapImage)));
-        public BitmapImage Image
+                new PropertyMetadata(default(BitmapSource)));
+        public BitmapSource Image
         {
-            get { return (BitmapImage)GetValue(ImageProperty); }
+            get { return (BitmapSource)GetValue(ImageProperty); }
             set { SetValue(ImageProperty, value); }
         }
         public TourInformationDisplayView()

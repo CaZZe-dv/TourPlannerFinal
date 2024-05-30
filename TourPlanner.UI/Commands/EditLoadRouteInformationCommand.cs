@@ -33,19 +33,11 @@ namespace TourPlanner.UI.Commands
             }
         }
 
-        private bool ValidateLongitudeLatitude(string value)
-        {
-            var regex = new Regex(@"^[-+]?([1-8]?\d(\.\d+)?|90(\.0+)?),\s*[-+]?(180(\.0+)?|((1[0-7]\d)|([1-9]?\d))(\.\d+)?)$");
-            return regex.IsMatch(value);
-        }
-
         public override bool CanExecute(object parameter)
         {
             return base.CanExecute(parameter) && !string.IsNullOrEmpty(_editTourViewModel.EditTourFrom)
                 && !string.IsNullOrEmpty(_editTourViewModel.EditTourTo)
-                && !string.IsNullOrEmpty(_editTourViewModel.EditTourTransportType)
-                && ValidateLongitudeLatitude(_editTourViewModel.EditTourFrom)
-                && ValidateLongitudeLatitude(_editTourViewModel.EditTourTo);
+                && !string.IsNullOrEmpty(_editTourViewModel.EditTourTransportType);
         }
 
         public override async Task ExecuteAsync(object parameter)

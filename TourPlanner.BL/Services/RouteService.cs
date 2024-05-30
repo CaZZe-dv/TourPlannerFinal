@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -8,7 +9,9 @@ namespace TourPlanner.BL.Services
 {
     public class RouteService : IRouteService
     {
-        private const string BASE_URL = "https://api.openrouteservice.org/v2/directions/";
+        private const string BASE_URL_DIRECTIONS = "https://api.openrouteservice.org/v2/directions/";
+
+        private const string BASE_URL_GEOCODE = "https://api.openrouteservice.org/geocode/search?api_key=";
 
         private readonly string API_KEY;
 
@@ -22,14 +25,19 @@ namespace TourPlanner.BL.Services
             transportTypes.Add("Driving", "driving-car");
         }
 
-        private string GetRouteURL(string transportType, string start, string end)
+        private string GetDirectionsURL(string transportType, string start, string end)
         {
-            return $"{BASE_URL}{transportTypes[transportType]}?api_key={API_KEY}&start={start}&end={end}";
+            return $"{BASE_URL_DIRECTIONS}{transportTypes[transportType]}?api_key={API_KEY}&start={start}&end={end}";
         }
 
-        public async Task<RouteResponse?> GetRouteResponse(string transportType, string start, string end)
+        private string GetGeocodeURL(string location)
         {
-            var url = GetRouteURL(transportType, start, end);
+            return $"{BASE_URL_GEOCODE}{API_KEY}&text={location}";
+        }
+
+        public async Task<string?> GetGeocodeResponse(string location)
+        {
+            var url = GetGeocodeURL(location);
 
             using (var httpClient = new HttpClient())
             {
@@ -41,7 +49,7 @@ namespace TourPlanner.BL.Services
                     if (response.IsSuccessStatusCode)
                     {
                         string responseData = await response.Content.ReadAsStringAsync();
-                        return ParseRouteResponse(responseData);
+                        return ParseGeocodeResponse(responseData);
                     }
                     else
                     {
@@ -51,7 +59,71 @@ namespace TourPlanner.BL.Services
             }
         }
 
-        private RouteResponse ParseRouteResponse(string responseData)
+        private string? ParseGeocodeResponse(string responseData)
+        {
+            try
+            {
+                // Parse the JSON response
+                JObject jsonResponse = JObject.Parse(responseData);
+
+                // Extract coordinates from the first feature
+                var features = jsonResponse["features"];
+                if (features != null && features.Count() > 0)
+                {
+                    var geometry = features[0]?["geometry"];
+                    if (geometry != null)
+                    {
+                        var coordinates = geometry["coordinates"];
+                        if (coordinates != null && coordinates.Count() == 2)
+                        {
+                            double longitude = (double)coordinates[0];
+                            double latitude = (double)coordinates[1];
+
+                            return $"{longitude.ToString(CultureInfo.InvariantCulture)},{latitude.ToString(CultureInfo.InvariantCulture)}";
+                        }
+                    }
+                }
+
+                // Return null if coordinates are not found
+                return null;
+            }
+            catch (Exception ex)
+            {
+                // Handle JSON parsing errors
+                throw new Exception("Error parsing geocode response", ex);
+            }
+        }
+
+        public async Task<RouteResponse?> GetRouteResponse(string transportType, string startLocation, string endLocation)
+        {
+            string start = await GetGeocodeResponse(startLocation);
+            string end = await GetGeocodeResponse(endLocation);
+
+            if (start == null || end == null) return null;
+
+            var url = GetDirectionsURL(transportType, start, end);
+
+            using (var httpClient = new HttpClient())
+            {
+                httpClient.DefaultRequestHeaders.Clear();
+                httpClient.DefaultRequestHeaders.TryAddWithoutValidation("accept", "application/json, application/geo+json, application/gpx+xml, img/png; charset=utf-8");
+
+                using (var response = await httpClient.GetAsync(url))
+                {
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string responseData = await response.Content.ReadAsStringAsync();
+                        return ParseRouteResponse(responseData,start,end);
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+            }
+        }
+
+        private RouteResponse ParseRouteResponse(string responseData,string start, string end)
         {
             try
             {
@@ -77,7 +149,9 @@ namespace TourPlanner.BL.Services
                         return new RouteResponse
                         {
                             Distance = distance,
-                            Duration = duration
+                            Duration = duration,
+                            Start = start,
+                            End = end
                         };
                     }
                 }
@@ -97,5 +171,7 @@ namespace TourPlanner.BL.Services
     {
         public double Distance { get; set; }
         public double Duration { get; set; }
+        public string Start { get; set; }
+        public string End { get; set; }
     }
 }

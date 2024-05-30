@@ -34,40 +34,25 @@ namespace TourPlanner.UI.Commands
             }
         }
 
-        private bool ValidateLongitudeLatitude(string value)
-        {
-            var regex = new Regex(@"^[-+]?([1-8]?\d(\.\d+)?|90(\.0+)?),\s*[-+]?(180(\.0+)?|((1[0-7]\d)|([1-9]?\d))(\.\d+)?)$");
-            return regex.IsMatch(value);
-        }
-
         public override bool CanExecute(object parameter)
         {
             return base.CanExecute(parameter) && !string.IsNullOrEmpty(_addTourViewModel.AddTourFrom)
                 && !string.IsNullOrEmpty(_addTourViewModel.AddTourTo)
-                && !string.IsNullOrEmpty(_addTourViewModel.AddTourTransportType)
-                && ValidateLongitudeLatitude(_addTourViewModel.AddTourFrom)
-                && ValidateLongitudeLatitude(_addTourViewModel.AddTourTo);
+                && !string.IsNullOrEmpty(_addTourViewModel.AddTourTransportType);
         }
 
         public override async Task ExecuteAsync(object parameter)
         {
             RouteResponse? routeResponse = await _tourPlannerRepository.GetRouteInformation(_addTourViewModel.AddTourTransportType,
                 _addTourViewModel.AddTourFrom, _addTourViewModel.AddTourTo);
-            //BitmapImage? image = await _tourPlannerRepository.GetRouteImage("1", _addTourViewModel.AddTourFrom, _addTourViewModel.AddTourTo);
-            if (routeResponse != null /** && image != null**/)
+            BitmapSource? image = await _tourPlannerRepository.GetRouteImage("14", routeResponse.Start, routeResponse.End);
+            if (routeResponse != null && image != null)
             {
                 _addTourViewModel.AddTourDistance = routeResponse.Distance.ToString();
                 _addTourViewModel.AddTourEstimatedTime = TimeSpan.FromMinutes(routeResponse.Duration).ToString();
-                //_addTourViewModel.AddTourImage = image;
+                _addTourViewModel.AddTourImage = image;
                 _addTourViewModel.IsRouteInformationFetched = true;
-                return;
             }
-            _addTourViewModel.AddTourFrom = string.Empty;
-            _addTourViewModel.AddTourTo = string.Empty;
-            //_addTourViewModel.AddTourTransportType = string.Empty;
-            _addTourViewModel.AddTourDistance = string.Empty;
-            _addTourViewModel.AddTourEstimatedTime = string.Empty;
-            //_addTourViewModel.AddTourImage = null;
         }
     }
 }

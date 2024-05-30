@@ -28,7 +28,7 @@ namespace TourPlanner.UI.Commands
                 e.PropertyName == nameof(_addTourViewModel.AddTourTransportType) ||
                 e.PropertyName == nameof(_addTourViewModel.AddTourDistance) ||
                 e.PropertyName == nameof(_addTourViewModel.AddTourEstimatedTime)
-                /**|| e.PropertyName == nameof(_addTourViewModel.AddTourImage)**/
+                //|| e.PropertyName == nameof(_addTourViewModel.AddTourImage)
                 || e.PropertyName == nameof(_addTourViewModel.IsRouteInformationFetched))
             {
                 OnCanExecuteChanged();
@@ -44,8 +44,8 @@ namespace TourPlanner.UI.Commands
                 && !string.IsNullOrEmpty(_addTourViewModel.AddTourTransportType)
                 && !string.IsNullOrEmpty(_addTourViewModel.AddTourDistance)
                 && !string.IsNullOrEmpty(_addTourViewModel.AddTourEstimatedTime)
-                && _addTourViewModel.IsRouteInformationFetched
-                /**&& _addTourViewModel.AddTourImage != null**/;
+                && _addTourViewModel.IsRouteInformationFetched;
+                //&& _addTourViewModel.AddTourImage != null;
         }
 
         public override async Task ExecuteAsync(object? parameter)
@@ -58,7 +58,7 @@ namespace TourPlanner.UI.Commands
                 _addTourViewModel.AddTourTransportType,
                 float.Parse(_addTourViewModel.AddTourDistance),
                 TimeSpan.Parse(_addTourViewModel.AddTourEstimatedTime),
-                /**_addTourViewModel.AddTourImage)**/null));
+                /**_addTourViewModel.AddTourImage**/null));
             _navigationService.Navigate();
         }
     }

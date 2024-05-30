@@ -90,8 +90,8 @@ namespace TourPlanner.UI.ViewModels
             }
         }
 
-        private BitmapImage _addTourImage;
-        public BitmapImage AddTourImage
+        private BitmapSource _addTourImage;
+        public BitmapSource AddTourImage
         {
             get => _addTourImage;
             set

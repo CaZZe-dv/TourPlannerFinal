@@ -23,14 +23,12 @@ namespace TourPlanner.UI
         private readonly SharedDataService _sharedDataService;
         private readonly TourPlannerRepository _tourPlannerManager;
         private readonly TourPlannerDbContextFactory _tourPlannerDbContextFactory;
-
         private readonly ImageService _imageService;
-
-        //private static readonly ILoggerWrapper logger = Utility.Logging.LoggerFactory.GetLogger();
+        private static readonly ILoggerWrapper logger = Utility.Logging.LoggerFactory.GetLogger();
 
         public App()
         {
-            //logger.Info("massive error occurred");
+            logger.Info("App initialization started.");
 
             _imageService = new ImageService(getImageDirectoryPathFromConfigFile());
 
@@ -46,6 +44,8 @@ namespace TourPlanner.UI
             IMapService mapService = new MapService();
 
             _tourPlannerManager = new TourPlannerRepository(tourHandler, tourLogHandler, routeService, mapService, _imageService);
+
+            logger.Info("App initialization finished");
         }
 
         private string getImageDirectoryPathFromConfigFile()
@@ -95,6 +95,8 @@ namespace TourPlanner.UI
             MainWindow.Show();
 
             base.OnStartup(e);
+
+            logger.Info("App started.");
         }
 
         private MainMenuViewModel CreateMainMenuViewModel()

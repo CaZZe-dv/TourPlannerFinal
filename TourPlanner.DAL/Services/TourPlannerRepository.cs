@@ -10,9 +10,9 @@ namespace TourPlanner.DAL.Services
         private readonly ITourLog _tourLogHandler;
         private readonly IRouteService _routeService;
         private readonly IMapService _mapService;
-        private readonly ImageService _imageService;
+        private readonly IImageService _imageService;
 
-        public TourPlannerRepository(ITour tourHandler, ITourLog tourLogHandler, IRouteService routeService, IMapService mapService, ImageService imageService)
+        public TourPlannerRepository(ITour tourHandler, ITourLog tourLogHandler, IRouteService routeService, IMapService mapService, IImageService imageService)
         {
             _tourHandler = tourHandler;
             _tourLogHandler = tourLogHandler;
@@ -21,9 +21,9 @@ namespace TourPlanner.DAL.Services
             _imageService = imageService;
         }
 
-        public async Task<BitmapImage?> GetRouteImage(string zoom, string x, string y)
+        public async Task<BitmapSource?> GetRouteImage(string zoom, string x, string y)
         {
-            return await _mapService.GetMapTileAsync(zoom, x, y);
+            return await _mapService.GenerateMapAsync(zoom, x, y);
         }
 
         public async Task<RouteResponse?> GetRouteInformation(string transportType, string start, string end)
@@ -39,7 +39,7 @@ namespace TourPlanner.DAL.Services
         public async Task AddTour(Tour tour)
         {
             Guid id = await _tourHandler.CreateTour(tour);
-            //_imageService.SaveImage(tour.RouteInformation, id.ToString());
+            //await _imageService.SaveImage(tour.RouteInformation, id.ToString());
         }
 
         public async Task UpdateTour(Tour tour)

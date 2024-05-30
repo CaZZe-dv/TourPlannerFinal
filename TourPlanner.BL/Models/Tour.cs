@@ -14,26 +14,26 @@ namespace TourPlanner.BL.Models
         public string TransportType { get; }
         public float TourDistance { get; }
         public TimeSpan EstimatedTime { get; }
-        public BitmapImage? RouteInformation { get; }
+        public BitmapSource? RouteInformation { get; }
 
         public readonly List<TourLog> TourLogs;
 
 
         public Tour(Guid id, string name, string description, string from, string to,
             string transportType, float tourDistance,
-            TimeSpan estimatedTime, BitmapImage routeInformation, List<TourLog> tourLogs) : this(id, name, description, from, to, transportType, tourDistance, estimatedTime, routeInformation)
+            TimeSpan estimatedTime, BitmapSource routeInformation, List<TourLog> tourLogs) : this(id, name, description, from, to, transportType, tourDistance, estimatedTime, routeInformation)
         {
             TourLogs = tourLogs;
         }
         public Tour(Guid id, string name, string description, string from, string to,
             string transportType, float tourDistance,
-            TimeSpan estimatedTime, BitmapImage routeInformation) : this(name, description, from, to, transportType, tourDistance, estimatedTime, routeInformation)
+            TimeSpan estimatedTime, BitmapSource routeInformation) : this(name, description, from, to, transportType, tourDistance, estimatedTime, routeInformation)
         {
             Id = id;
         }
         public Tour(string name, string description, string from, string to,
             string transportType, float tourDistance,
-            TimeSpan estimatedTime, BitmapImage routeInformation)
+            TimeSpan estimatedTime, BitmapSource routeInformation)
         {
             Name = name;
             Description = description;

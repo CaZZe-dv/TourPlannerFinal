@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
-
 
 namespace TourPlanner.BL.Services
 {
-    public class ImageService
+    public class ImageService : IImageService
     {
         private readonly string _imageDirectory;
 
@@ -24,11 +19,11 @@ namespace TourPlanner.BL.Services
             }
         }
 
-        private byte[] BitmapImageToByteArray(BitmapImage bitmapImage)
+        private byte[] BitmapSourceToByteArray(BitmapSource bitmapSource)
         {
             byte[] data;
             JpegBitmapEncoder encoder = new JpegBitmapEncoder();
-            encoder.Frames.Add(BitmapFrame.Create(bitmapImage));
+            encoder.Frames.Add(BitmapFrame.Create(bitmapSource));
             using (MemoryStream ms = new MemoryStream())
             {
                 encoder.Save(ms);
@@ -37,11 +32,25 @@ namespace TourPlanner.BL.Services
             return data;
         }
 
-
-        public string SaveImage(BitmapImage bitmapImage, string tourId)
+        public async Task RemoveImage(string tourId)
         {
-            // Convert BitmapImage to byte[]
-            byte[] imageData = BitmapImageToByteArray(bitmapImage);
+            string fileName = $"{tourId}.jpg";
+            string filePath = Path.Combine(_imageDirectory, fileName);
+
+            if (File.Exists(filePath))
+            {
+                File.Delete(filePath);
+            }
+            else
+            {
+                throw new FileNotFoundException("Image not found.", filePath);
+            }
+        }
+
+        public async Task<string> SaveImage(BitmapSource bitmapSource, string tourId)
+        {
+            // Convert BitmapSource to byte[]
+            byte[] imageData = BitmapSourceToByteArray(bitmapSource);
 
             // Generate a unique filename
             string fileName = $"{tourId}.jpg";
@@ -53,20 +62,24 @@ namespace TourPlanner.BL.Services
             return filePath;
         }
 
-        public string? GetImage(string tourId)
+        public async Task<BitmapSource> GetImage(string tourId)
         {
             string fileName = $"{tourId}.jpg";
             string filePath = Path.Combine(_imageDirectory, fileName);
 
             if (!File.Exists(filePath))
             {
-                return null; // Or return a default image
+                throw new FileNotFoundException("Image not found.", filePath);
             }
 
-            return filePath;
+            // Read the image data from the file
+            byte[] imageData = File.ReadAllBytes(filePath);
+
+            // Convert byte[] to BitmapSource
+            return ByteArrayToBitmapSource(imageData);
         }
 
-        public BitmapImage ByteArrayToBitmapImage(byte[] byteArray)
+        public BitmapSource ByteArrayToBitmapSource(byte[] byteArray)
         {
             using (var stream = new MemoryStream(byteArray))
             {
