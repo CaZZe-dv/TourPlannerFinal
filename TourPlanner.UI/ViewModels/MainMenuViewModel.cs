@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Windows;
 using System.Windows.Input;
 using TourPlanner.BL.Models;
 using TourPlanner.DAL.Services;
@@ -127,6 +128,9 @@ namespace TourPlanner.UI.ViewModels
             LoadTourCommand.Execute(null);
 
             LoadTourLogCommand = new LoadTourLogCommand(tourPlannerManager, this);
+
+            //Report
+            MainMenuOptionsCommand = new GetOptionsCommand(this);
         }
 
         public void UpdateTours(IEnumerable<Tour> tours)
@@ -153,6 +157,27 @@ namespace TourPlanner.UI.ViewModels
                     _tourLogs.Add(new TourLogViewModel(tl));
                 }
             }
+        }
+
+        // Method to generate a report for the selected tour
+        public void GenerateReportForSelectedTour()
+        {
+            if (SelectedTour != null)
+            {
+                // Logic to generate report for SelectedTour
+                MessageBox.Show($"Report generated for tour: {SelectedTour.Tour.Name}");
+            }
+            else
+            {
+                MessageBox.Show("No tour selected.");
+            }
+        }
+
+        // Method to generate a report for all tours
+        public void GenerateReportForAllTours()
+        {
+            // Logic to generate report for all tours
+            MessageBox.Show("Report generated for all tours.");
         }
 
     }

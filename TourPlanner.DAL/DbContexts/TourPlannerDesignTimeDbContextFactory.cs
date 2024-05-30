@@ -8,7 +8,7 @@ namespace TourPlanner.DAL.DbContexts
         public TourPlannerDbContext CreateDbContext(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<TourPlannerDbContext>();
-            optionsBuilder.UseNpgsql("Host=localhost;Username=postgres;Password=12345;Database=TourPlannerDatabase");
+            optionsBuilder.UseNpgsql("Host=localhost;Port=5455;Username=postgres;Password=1234;Database=TourPlannerDatabase");
 
             return new TourPlannerDbContext(optionsBuilder.Options);
         }
