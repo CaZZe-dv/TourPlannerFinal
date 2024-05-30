@@ -1,0 +1,10 @@
+﻿<Window x:Class="TourPlanner.UI.Views.CustomDialogReport"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Generate Report" Height="200" Width="400">
+    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+        <TextBlock Text="Choose an option:" Margin="0,0,0,20" FontSize="16"/>
+        <Button Content="Tour-Report" Width="120" Margin="10" Click="TourReport_Click"/>
+        <Button Content="Summarize-Report" Width="120" Margin="10" Click="SummarizeReport_Click"/>
+    </StackPanel>
+    </Window>

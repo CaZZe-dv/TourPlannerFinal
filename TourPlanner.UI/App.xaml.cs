@@ -23,6 +23,8 @@ namespace TourPlanner.UI
         private readonly SharedDataService _sharedDataService;
         private readonly TourPlannerRepository _tourPlannerManager;
         private readonly TourPlannerDbContextFactory _tourPlannerDbContextFactory;
+        
+        private readonly TourReportService _tourReportService;
 
         private readonly ImageService _imageService;
 
@@ -39,6 +41,8 @@ namespace TourPlanner.UI
             _sharedDataService = new SharedDataService();
 
             _tourPlannerDbContextFactory = new TourPlannerDbContextFactory(getDbStringFromConfigFile());
+
+            _tourReportService = new TourReportService();
 
             ITour tourHandler = new DatabaseTour(_tourPlannerDbContextFactory);
             ITourLog tourLogHandler = new DatabaseTourLog(_tourPlannerDbContextFactory);

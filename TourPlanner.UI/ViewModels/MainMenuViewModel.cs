@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Input;
 using TourPlanner.BL.Models;
+using TourPlanner.BL.Services;
 using TourPlanner.DAL.Services;
 using TourPlanner.UI.Commands;
 using TourPlanner.UI.Services;
@@ -108,6 +109,8 @@ namespace TourPlanner.UI.ViewModels
             }
         }
 
+        //private readonly ITourReportService _tourReportService;
+
         public MainMenuViewModel(TourPlannerRepository tourPlannerManager, NavigationService addTourNavigationService, NavigationService editTourNavigationService,
             NavigationService addTourLogNavigationService, NavigationService editTourLogNavigationService, SharedDataService sharedDataService)
         {
@@ -130,7 +133,9 @@ namespace TourPlanner.UI.ViewModels
             LoadTourLogCommand = new LoadTourLogCommand(tourPlannerManager, this);
 
             //Report
+            //_tourReportService = tourReportService;
             MainMenuOptionsCommand = new GetOptionsCommand(this);
+            //_tourReportService = tourReportService;
         }
 
         public void UpdateTours(IEnumerable<Tour> tours)
@@ -159,12 +164,11 @@ namespace TourPlanner.UI.ViewModels
             }
         }
 
-        // Method to generate a report for the selected tour
         public void GenerateReportForSelectedTour()
         {
             if (SelectedTour != null)
             {
-                // Logic to generate report for SelectedTour
+                //_tourReportService.GenerateReportForTour(SelectedTour.Tour);
                 MessageBox.Show($"Report generated for tour: {SelectedTour.Tour.Name}");
             }
             else
@@ -173,10 +177,9 @@ namespace TourPlanner.UI.ViewModels
             }
         }
 
-        // Method to generate a report for all tours
         public void GenerateReportForAllTours()
         {
-            // Logic to generate report for all tours
+            //_tourReportService.GenerateReportForAllTours();
             MessageBox.Show("Report generated for all tours.");
         }
 

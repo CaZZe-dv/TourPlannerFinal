@@ -1,40 +1,57 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using TourPlanner.BL.Services;
 using TourPlanner.UI.ViewModels;
+using TourPlanner.UI.Views;
 
 namespace TourPlanner.UI.Commands
 {
     internal class GetOptionsCommand : ICommand
     {
         private readonly MainMenuViewModel _viewModel;
+        private readonly TourReportService _tourReportService;
+        private readonly TourReportService tourReportService;
+
+        private string tourname;
 
         public GetOptionsCommand(MainMenuViewModel viewModel)
         {
             _viewModel = viewModel;
+            _tourReportService = tourReportService;
         }
 
         public bool CanExecute(object parameter) => true;
 
-        public void Execute(object parameter)
+        public async void Execute(object parameter)
         {
-            // Display a simple MessageBox to choose the option
-            var result = MessageBox.Show("Choose an option:\n\n1. Generate report for selected tour\n2. Generate report for all tours",
-                "Generate Report", MessageBoxButton.YesNoCancel);
-
-            // Yes corresponds to option 1
-            if (result == MessageBoxResult.Yes)
+            CustomDialogReport dialog = new CustomDialogReport();
+            if (dialog.ShowDialog() == true)
             {
-                _viewModel.GenerateReportForSelectedTour();
-            }
-            // No corresponds to option 2
-            else if (result == MessageBoxResult.No)
-            {
-                _viewModel.GenerateReportForAllTours();
+                if (dialog.Tag.ToString() == "TourReport")
+                {
+                    Debug.WriteLine("einzeln2");
+                    if (_viewModel.SelectedTour != null)
+                    {
+                        string reportFileName = await _tourReportService.GenerateReportForTour(_viewModel.SelectedTour.Tour);
+                        Debug.WriteLine($"Report generated for tour: {_viewModel.SelectedTour.Tour.Name}");
+                    }
+                    else
+                    {
+                        Debug.WriteLine("No tour selected.");
+                    }
+                }
+                else if (dialog.Tag.ToString() == "SummarizeReport")
+                {
+                    Debug.WriteLine("alle2");
+                    string reportFileName = await _tourReportService.GenerateReportForAllTours();
+                    Debug.WriteLine("Report generated for all tours.");
+                }
             }
         }
 
