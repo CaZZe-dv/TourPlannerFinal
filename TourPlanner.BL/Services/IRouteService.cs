@@ -8,6 +8,6 @@ namespace TourPlanner.BL.Services
 {
     public interface IRouteService
     {
-        Task<string> getResponse(string start, string end);
+        Task<RouteResponse?> GetRouteResponse(string transportType, string start, string end);
     }
 }

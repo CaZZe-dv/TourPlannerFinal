@@ -1,4 +1,5 @@
-﻿using TourPlanner.BL.Models;
+﻿using System.Windows.Media.Imaging;
+using TourPlanner.BL.Models;
 using TourPlanner.BL.Services;
 
 namespace TourPlanner.DAL.Services
@@ -9,13 +10,25 @@ namespace TourPlanner.DAL.Services
         private readonly ITourLog _tourLogHandler;
         private readonly IRouteService _routeService;
         private readonly IMapService _mapService;
+        private readonly ImageService _imageService;
 
-        public TourPlannerRepository(ITour tourHandler, ITourLog tourLogHandler, IRouteService routeService, IMapService mapService)
+        public TourPlannerRepository(ITour tourHandler, ITourLog tourLogHandler, IRouteService routeService, IMapService mapService, ImageService imageService)
         {
             _tourHandler = tourHandler;
             _tourLogHandler = tourLogHandler;
             _routeService = routeService;
             _mapService = mapService;
+            _imageService = imageService;
+        }
+
+        public async Task<BitmapImage?> GetRouteImage(string zoom, string x, string y)
+        {
+            return await _mapService.GetMapTileAsync(zoom, x, y);
+        }
+
+        public async Task<RouteResponse?> GetRouteInformation(string transportType, string start, string end)
+        {
+            return await _routeService.GetRouteResponse(transportType,start,end);
         }
 
         public async Task<IEnumerable<Tour>> GetAllTours()
@@ -25,7 +38,8 @@ namespace TourPlanner.DAL.Services
 
         public async Task AddTour(Tour tour)
         {
-            await _tourHandler.CreateTour(tour);
+            Guid id = await _tourHandler.CreateTour(tour);
+            //_imageService.SaveImage(tour.RouteInformation, id.ToString());
         }
 
         public async Task UpdateTour(Tour tour)

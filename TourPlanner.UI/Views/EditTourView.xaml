@@ -3,12 +3,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:TourPlanner.UI.Views"
+             xmlns:views="clr-namespace:TourPlanner.UI.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
@@ -24,13 +23,19 @@
         <TextBox Grid.Row="1" FontSize="24" Text="{Binding EditTourName, UpdateSourceTrigger=PropertyChanged}"/>
         <TextBlock Grid.Row="2" Text="Description:" FontSize="24"/>
         <TextBox Grid.Row="3" FontSize="24" Text="{Binding EditTourDescription, UpdateSourceTrigger=PropertyChanged}"/>
-        <TextBlock Grid.Row="4" Text="From:" FontSize="24"/>
-        <TextBox Grid.Row="5" FontSize="24" Text="{Binding EditTourFrom, UpdateSourceTrigger=PropertyChanged}"/>
-        <TextBlock Grid.Row="6" Text="To:" FontSize="24"/>
-        <TextBox Grid.Row="7" FontSize="24" Text="{Binding EditTourTo, UpdateSourceTrigger=PropertyChanged}"/>
-        <TextBlock Grid.Row="8" Text="Transport Type:" FontSize="24"/>
-        <TextBox Grid.Row="9" FontSize="24" Text="{Binding EditTourTransportType, UpdateSourceTrigger=PropertyChanged}"/>
-        <Grid Grid.Row="10">
+        <StackPanel Grid.Row="4" Orientation="Horizontal" VerticalAlignment="Top">
+            <TextBlock Text="From:" Margin="10" FontSize="24"/>
+            <TextBox Text="{Binding EditTourFrom,UpdateSourceTrigger=PropertyChanged}" Width="200" Margin="10" FontSize="24"/>
+            <TextBlock Text="To:" Margin="10" FontSize="24"/>
+            <TextBox Text="{Binding EditTourTo, UpdateSourceTrigger=PropertyChanged}" Width="200" Margin="10" FontSize="24"/>
+        </StackPanel>
+        <TextBlock Grid.Row="5" Text="Transport Type:" FontSize="24"/>
+        <ComboBox Grid.Row="6" ItemsSource="{Binding TransportTypes}" SelectedItem="{Binding EditTourTransportType}" FontSize="24"/>
+        <Button Grid.Row="7" Content="Fetch Route Data" Command="{Binding LoadRouteInformation}" FontSize="24"/>
+        <views:TourInformationDisplayView Grid.Row="8" Distance="{Binding EditTourDistance}"
+                                   EstimatedTime="{Binding EditTourEstimatedTime}"
+                                    Image="{Binding EditTourImage}"/>
+        <Grid Grid.Row="9">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>

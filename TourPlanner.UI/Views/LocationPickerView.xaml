@@ -1,0 +1,31 @@
+﻿<UserControl x:Class="TourPlanner.UI.Views.LocationPickerView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:gmap="clr-namespace:GMap.NET.WindowsPresentation;assembly=GMap.NET.WindowsPresentation"
+             mc:Ignorable="d" 
+             d:DesignHeight="400" d:DesignWidth="600">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
+            <TextBox x:Name="FromTextBox" Width="200" Margin="10" 
+                     IsReadOnly="True" Text="From"
+                     MouseDown="FromTextBox_MouseDown"/>
+            <TextBox x:Name="ToTextBox" Width="200" Margin="10" 
+                     IsReadOnly="True" Text="To" 
+                     MouseDown="ToTextBox_MouseDown"/>
+        </StackPanel>
+
+        <gmap:GMapControl x:Name="mapControl" Grid.Row="1"
+                          Zoom="10"
+                          MinZoom="2"
+                          MaxZoom="17"
+                          MouseDown="MapControl_OnMapClick"
+                          Background="Gray"/>
+    </Grid>
+</UserControl>

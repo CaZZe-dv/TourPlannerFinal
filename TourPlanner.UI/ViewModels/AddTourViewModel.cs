@@ -1,4 +1,8 @@
-﻿using System.Windows.Input;
+﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Security.Policy;
+using System.Windows.Input;
+using System.Windows.Media.Imaging;
 using TourPlanner.DAL.Services;
 using TourPlanner.UI.Commands;
 using TourPlanner.UI.Services;
@@ -51,6 +55,8 @@ namespace TourPlanner.UI.ViewModels
             }
         }
 
+        public List<string> TransportTypes { get; } = new List<string> { "Walking", "Driving", "Cycling" };
+
         private string _addTourTransportType;
         public string AddTourTransportType
         {
@@ -62,13 +68,49 @@ namespace TourPlanner.UI.ViewModels
             }
         }
 
+        private string _addTourDistance;
+        public string AddTourDistance
+        {
+            get => _addTourDistance;
+            set
+            {
+                _addTourDistance = value;
+                OnPropertyChanged(nameof(AddTourDistance));
+            }
+        }
+
+        private string _addTourEstimatedTime;
+        public string AddTourEstimatedTime
+        {
+            get => _addTourEstimatedTime;
+            set
+            {
+                _addTourEstimatedTime = value;
+                OnPropertyChanged(nameof(AddTourEstimatedTime));
+            }
+        }
+
+        private BitmapImage _addTourImage;
+        public BitmapImage AddTourImage
+        {
+            get => _addTourImage;
+            set
+            {
+                _addTourImage = value;
+                OnPropertyChanged(nameof(AddTourImage));
+            }
+        }
+
         public ICommand CreateAddTourCommand { get; }
         public ICommand CancelAddTourCommand { get; }
+
+        public ICommand LoadRouteInformation { get; }
 
         public AddTourViewModel(TourPlannerRepository tourPlannerManager, NavigationService navigationService)
         {
             CreateAddTourCommand = new CreateAddTourCommand(this, tourPlannerManager, navigationService);
             CancelAddTourCommand = new CancelAddTourCommand(navigationService);
+            LoadRouteInformation = new LoadRouteInformationCommand(this, tourPlannerManager);
         }
     }
 }

@@ -25,7 +25,10 @@ namespace TourPlanner.UI.Commands
                 e.PropertyName == nameof(_addTourViewModel.AddTourFrom) ||
                 e.PropertyName == nameof(_addTourViewModel.AddTourTo) ||
                 e.PropertyName == nameof(_addTourViewModel.AddTourDescription) ||
-                e.PropertyName == nameof(_addTourViewModel.AddTourTransportType))
+                e.PropertyName == nameof(_addTourViewModel.AddTourTransportType) ||
+                e.PropertyName == nameof(_addTourViewModel.AddTourDistance) ||
+                e.PropertyName == nameof(_addTourViewModel.AddTourEstimatedTime)
+                /**|| e.PropertyName == nameof(_addTourViewModel.AddTourImage)**/)
             {
                 OnCanExecuteChanged();
             }
@@ -37,7 +40,10 @@ namespace TourPlanner.UI.Commands
                 && !string.IsNullOrEmpty(_addTourViewModel.AddTourFrom)
                 && !string.IsNullOrEmpty(_addTourViewModel.AddTourTo)
                 && !string.IsNullOrEmpty(_addTourViewModel.AddTourDescription)
-                && !string.IsNullOrEmpty(_addTourViewModel.AddTourTransportType);
+                && !string.IsNullOrEmpty(_addTourViewModel.AddTourTransportType)
+                && !string.IsNullOrEmpty(_addTourViewModel.AddTourDistance)
+                && !string.IsNullOrEmpty(_addTourViewModel.AddTourEstimatedTime)
+                /**&& _addTourViewModel.AddTourImage != null**/;
         }
 
         public override async Task ExecuteAsync(object? parameter)
@@ -48,10 +54,9 @@ namespace TourPlanner.UI.Commands
                 _addTourViewModel.AddTourFrom,
                 _addTourViewModel.AddTourTo,
                 _addTourViewModel.AddTourTransportType,
-                0,
-                TimeSpan.Zero,
-                null
-                ));
+                float.Parse(_addTourViewModel.AddTourDistance),
+                TimeSpan.Parse(_addTourViewModel.AddTourEstimatedTime),
+                /**_addTourViewModel.AddTourImage)**/null));
             _navigationService.Navigate();
         }
     }

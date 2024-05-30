@@ -45,7 +45,7 @@ namespace TourPlanner.UI
             IRouteService routeService = new RouteService(getApiStringFromConfigFile());
             IMapService mapService = new MapService();
 
-            _tourPlannerManager = new TourPlannerRepository(tourHandler, tourLogHandler, routeService, mapService);
+            _tourPlannerManager = new TourPlannerRepository(tourHandler, tourLogHandler, routeService, mapService, _imageService);
         }
 
         private string getImageDirectoryPathFromConfigFile()

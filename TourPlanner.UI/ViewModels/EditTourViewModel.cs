@@ -52,6 +52,8 @@ namespace TourPlanner.UI.ViewModels
             }
         }
 
+        public List<string> TransportTypes { get; } = new List<string> { "Walking", "Driving", "Cycling" };
+
         private string _editTourTransportType;
         public string EditTourTransportType
         {
@@ -63,21 +65,48 @@ namespace TourPlanner.UI.ViewModels
             }
         }
 
+        private string _editTourDistance;
+        public string EditTourDistance
+        {
+            get => _editTourDistance;
+            set
+            {
+                _editTourDistance = value;
+                OnPropertyChanged(nameof(EditTourDistance));
+            }
+        }
+
+        private string _editTourEstimatedTime;
+        public string EditTourEstimatedTime
+        {
+            get => _editTourEstimatedTime;
+            set
+            {
+                _editTourEstimatedTime = value;
+                OnPropertyChanged(nameof(EditTourEstimatedTime));
+            }
+        }
+
         public ICommand UpdateEditTourCommand { get; }
         public ICommand CancelEditTourCommand { get; }
+
+        public ICommand LoadRouteInformation { get; }
 
         public EditTourViewModel(TourPlannerRepository tourPlannerManager, NavigationService navigationService, SharedDataService sharedDataService)
         {
             Tour existingTour = sharedDataService.SelectedTour;
 
             _editTourName = existingTour.Name;
-            _editTourFrom = existingTour.From;
-            _editTourTo = existingTour.To;
+            _editTourFrom = existingTour.From.ToString();
+            _editTourTo = existingTour.To.ToString();
             _editTourDescription = existingTour.Description;
             _editTourTransportType = existingTour.TransportType;
+            _editTourDistance = existingTour.TourDistance.ToString();
+            _editTourEstimatedTime = existingTour.EstimatedTime.ToString();
 
             UpdateEditTourCommand = new UpdateEditTourCommand(this, tourPlannerManager, navigationService, sharedDataService);
             CancelEditTourCommand = new CancelEditTourCommand(navigationService);
+            LoadRouteInformation = new EditLoadRouteInformationCommand(this, tourPlannerManager);
         }
     }
 }

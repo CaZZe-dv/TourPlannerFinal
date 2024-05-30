@@ -1,8 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace TourPlanner.Migrations
+namespace TourPlanner.DAL.Migrations
 {
     /// <inheritdoc />
     public partial class init : Migration

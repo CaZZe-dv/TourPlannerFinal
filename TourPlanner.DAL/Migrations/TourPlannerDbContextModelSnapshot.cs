@@ -6,10 +6,9 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TourPlanner.DAL.DbContexts;
 
-
 #nullable disable
 
-namespace TourPlanner.Migrations
+namespace TourPlanner.DAL.Migrations
 {
     [DbContext(typeof(TourPlannerDbContext))]
     partial class TourPlannerDbContextModelSnapshot : ModelSnapshot
@@ -18,12 +17,12 @@ namespace TourPlanner.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.3")
+                .HasAnnotation("ProductVersion", "8.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("TourPlanner.Dtos.TourDTO", b =>
+            modelBuilder.Entity("TourPlanner.DAL.Dtos.TourDTO", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -60,7 +59,7 @@ namespace TourPlanner.Migrations
                     b.ToTable("Tours");
                 });
 
-            modelBuilder.Entity("TourPlanner.Dtos.TourLogDTO", b =>
+            modelBuilder.Entity("TourPlanner.DAL.Dtos.TourLogDTO", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()

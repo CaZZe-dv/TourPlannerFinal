@@ -38,13 +38,16 @@ namespace TourPlanner.UI.Views
             set { SetValue(EstimatedTimeProperty, value); }
         }
 
-        public static readonly DependencyProperty ImagePathProperty =
-            DependencyProperty.Register("ImagePath", typeof(string), typeof(TourInformationDisplayView), new PropertyMetadata(string.Empty));
-
-        public string ImagePath
+        public static readonly DependencyProperty ImageProperty =
+            DependencyProperty.Register(
+                nameof(Image),
+                typeof(BitmapImage),
+                typeof(TourInformationDisplayView),
+                new PropertyMetadata(default(BitmapImage)));
+        public BitmapImage Image
         {
-            get { return (string)GetValue(ImagePathProperty); }
-            set { SetValue(ImagePathProperty, value); }
+            get { return (BitmapImage)GetValue(ImageProperty); }
+            set { SetValue(ImageProperty, value); }
         }
         public TourInformationDisplayView()
         {

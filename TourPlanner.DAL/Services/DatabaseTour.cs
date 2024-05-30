@@ -13,12 +13,14 @@ namespace TourPlanner.DAL.Services
             _tourPlannerDbContextFactory = tourPlannerDbContextFactory;
         }
 
-        public async Task CreateTour(Tour tour)
+        public async Task<Guid> CreateTour(Tour tour)
         {
             using (TourPlannerDbContext context = _tourPlannerDbContextFactory.CreateDbContext())
             {
-                context.Tours.Add(ToTourDTO(tour));
+                TourDTO tourDTO = ToTourDTO(tour);
+                context.Tours.Add(tourDTO);
                 await context.SaveChangesAsync();
+                return tourDTO.Id;
             }
         }
 

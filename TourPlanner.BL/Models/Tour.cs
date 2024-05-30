@@ -1,4 +1,6 @@
-﻿using System.Drawing;
+﻿
+
+using System.Windows.Media.Imaging;
 
 namespace TourPlanner.BL.Models
 {
@@ -10,30 +12,28 @@ namespace TourPlanner.BL.Models
         public string From { get; }
         public string To { get; }
         public string TransportType { get; }
-        //Information retreived by API will be implemented later on for now
-        //Default values are initialised
         public float TourDistance { get; }
         public TimeSpan EstimatedTime { get; }
-        public Bitmap RouteInformation { get; }
+        public BitmapImage? RouteInformation { get; }
 
         public readonly List<TourLog> TourLogs;
 
 
         public Tour(Guid id, string name, string description, string from, string to,
             string transportType, float tourDistance,
-            TimeSpan estimatedTime, Bitmap routeInformation, List<TourLog> tourLogs) : this(id, name, description, from, to, transportType, tourDistance, estimatedTime, routeInformation)
+            TimeSpan estimatedTime, BitmapImage routeInformation, List<TourLog> tourLogs) : this(id, name, description, from, to, transportType, tourDistance, estimatedTime, routeInformation)
         {
             TourLogs = tourLogs;
         }
         public Tour(Guid id, string name, string description, string from, string to,
             string transportType, float tourDistance,
-            TimeSpan estimatedTime, Bitmap routeInformation) : this(name, description, from, to, transportType, tourDistance, estimatedTime, routeInformation)
+            TimeSpan estimatedTime, BitmapImage routeInformation) : this(name, description, from, to, transportType, tourDistance, estimatedTime, routeInformation)
         {
             Id = id;
         }
         public Tour(string name, string description, string from, string to,
             string transportType, float tourDistance,
-            TimeSpan estimatedTime, Bitmap routeInformation)
+            TimeSpan estimatedTime, BitmapImage routeInformation)
         {
             Name = name;
             Description = description;

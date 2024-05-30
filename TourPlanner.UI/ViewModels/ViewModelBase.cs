@@ -8,6 +8,7 @@ namespace TourPlanner.UI.ViewModels
 
         protected void OnPropertyChanged(string propertyName)
         {
+            Console.WriteLine(propertyName);
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
