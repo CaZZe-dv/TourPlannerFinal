@@ -13,28 +13,37 @@ namespace TourPlanner.BL.Services
     public class TourReportService
     {
 
-        
+        private string fileplace = "C:\\Users\\nicib\\Documents\\FHTW\\4\\swen\\";
+        private string documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+
+
         public async Task<string> GenerateReportForTour(Tour tour)
         {
-            string fileName = $"Report_{tour.Name.Replace(" ", "_")}.pdf";
+            string fileName = $"{fileplace}Report_{tour.Name.Replace(" ", "_")}.pdf";
             await GeneratePdfForTour(tour, fileName);
+            return fileName;
+        }
+        public async Task<string> GenerateReportTest(Tour tour)
+        {
+            string fileName = $"{fileplace}Report_{tour.Name.Replace(" ", "_")}.pdf";
+            Debug.WriteLine(fileName);
+            await GeneratePdfTest(tour, fileName);
             return fileName;
         }
 
         public async Task<string> GenerateReportForAllTours()
         {
-            string fileName = "Report_All_Tours.pdf";
+            string fileName = $"{fileplace}Report_All_Tours.pdf";
             await GeneratePdfForAllTours(fileName);
             return fileName;
         }
 
         private async Task GeneratePdfForTour(Tour tour, string fileName)
         {
-            using (var stream = new FileStream(fileName, FileMode.Create))
-            {
-                var writer = new PdfWriter(stream);
-                var pdf = new PdfDocument(writer);
-                var document = new Document(pdf);
+
+                PdfWriter writer = new PdfWriter(fileName);
+                PdfDocument pdf = new PdfDocument(writer);
+                Document document = new Document(pdf);
 
                 document.Add(new Paragraph($"Report for Tour: {tour.Name}").SetBold().SetFontSize(20));
                 document.Add(new Paragraph($"Description: {tour.Description}"));
@@ -42,7 +51,6 @@ namespace TourPlanner.BL.Services
                 document.Add(new Paragraph($"Estimated Time: {tour.EstimatedTime} hours"));
                 document.Add(new Paragraph($"Transport Type: {tour.TransportType}"));
 
-                // Simulate tour logs data (you can replace this with actual data later)
                 var tourLogs = GetSampleTourLogs();
                 if (tourLogs.Count > 0)
                 {
@@ -55,20 +63,30 @@ namespace TourPlanner.BL.Services
 
                 document.Close();
                 Debug.WriteLine("einzeln");
-            }
+            
+        }
+        private async Task GeneratePdfTest(Tour tour, string fileName)
+        {
+            
+                PdfWriter writer = new PdfWriter(fileName);
+                PdfDocument pdf = new PdfDocument(writer);
+                Document document = new Document(pdf);
+
+                document.Add(new Paragraph("Report for Tour"));
+
+                document.Close();
+                Debug.WriteLine("testpdf");
+            
         }
 
         private async Task GeneratePdfForAllTours(string fileName)
         {
-            using (var stream = new FileStream(fileName, FileMode.Create))
-            {
-                var writer = new PdfWriter(stream);
-                var pdf = new PdfDocument(writer);
-                var document = new Document(pdf);
 
+                PdfWriter writer = new PdfWriter(fileName);
+                PdfDocument pdf = new PdfDocument(writer);
+                Document document = new Document(pdf);
                 document.Add(new Paragraph("Report for All Tours").SetBold().SetFontSize(20));
 
-                // Simulate tour data (you can replace this with actual data later)
                 var tours = GetSampleTours();
                 foreach (var tour in tours)
                 {
@@ -78,7 +96,6 @@ namespace TourPlanner.BL.Services
                     document.Add(new Paragraph($"Estimated Time: {tour.EstimatedTime} hours"));
                     document.Add(new Paragraph($"Transport Type: {tour.TransportType}"));
 
-                    // Simulate tour logs data (you can replace this with actual data later)
                     var tourLogs = GetSampleTourLogs();
                     if (tourLogs.Count > 0)
                     {
@@ -94,7 +111,7 @@ namespace TourPlanner.BL.Services
 
                 document.Close();
                 Debug.WriteLine("alle");
-            }
+            
         }
 
         private List<Tour> GetSampleTours()
@@ -126,7 +143,6 @@ namespace TourPlanner.BL.Services
     };
         }
 
-        // Simulated sample tour logs data
         private List<TourLog> GetSampleTourLogs()
         {
             return new List<TourLog>

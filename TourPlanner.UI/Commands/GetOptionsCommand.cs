@@ -18,11 +18,15 @@ namespace TourPlanner.UI.Commands
         private readonly TourReportService _tourReportService;
         private readonly TourReportService tourReportService;
 
+
+        
+
         private string tourname;
 
         public GetOptionsCommand(MainMenuViewModel viewModel)
         {
             _viewModel = viewModel;
+            tourReportService = new TourReportService();
             _tourReportService = tourReportService;
         }
 
@@ -39,6 +43,7 @@ namespace TourPlanner.UI.Commands
                     if (_viewModel.SelectedTour != null)
                     {
                         string reportFileName = await _tourReportService.GenerateReportForTour(_viewModel.SelectedTour.Tour);
+                        //string reportFileName = await _tourReportService.GenerateReportTest(_viewModel.SelectedTour.Tour);
                         Debug.WriteLine($"Report generated for tour: {_viewModel.SelectedTour.Tour.Name}");
                     }
                     else
