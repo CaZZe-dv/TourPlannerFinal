@@ -49,6 +49,7 @@ namespace TourPlanner.UI.Commands
                         string reportFileName = await _dbTourReportService.GenerateReportForTour(_viewModel.SelectedTour.Tour, _tourPlannerManger);
                         //string reportFileName = await _tourReportService.GenerateReportTest(_viewModel.SelectedTour.Tour);
                         Debug.WriteLine($"Report generated for tour: {_viewModel.SelectedTour.Tour.Name}");
+                        //_viewModel.GenerateReportForSelectedTour;
                     }
                     else
                     {
@@ -60,6 +61,7 @@ namespace TourPlanner.UI.Commands
                     Debug.WriteLine("alleReport");
                     string reportFileName = await _dbTourReportService.GenerateReportForAllTours(_tourPlannerManger);
                     Debug.WriteLine("Report generated for all tours.");
+                    //_viewModel.GenerateReportForAllTours;
                 }
             }
         }

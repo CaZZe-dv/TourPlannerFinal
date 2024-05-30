@@ -133,9 +133,7 @@ namespace TourPlanner.UI.ViewModels
             LoadTourLogCommand = new LoadTourLogCommand(tourPlannerManager, this);
 
             //Report
-            //_tourReportService = tourReportService;
             MainMenuOptionsCommand = new GetOptionsCommand(this, tourPlannerManager);
-            //_tourReportService = tourReportService;
         }
 
         public void UpdateTours(IEnumerable<Tour> tours)

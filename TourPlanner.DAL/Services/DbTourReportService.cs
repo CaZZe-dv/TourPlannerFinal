@@ -1,6 +1,7 @@
 ﻿using iText.Kernel.Pdf;
 using iText.Layout.Element;
 using iText.Layout;
+using iText.IO.Image;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -14,18 +15,9 @@ namespace TourPlanner.DAL.Services
     public class DbTourReportService
     {
 
-        private readonly TourPlannerRepository tourPlannerRepository;
-        private readonly TourPlannerRepository _tourPlannerRepository;
-
-
-
-
         private string filePath = "C:\\Users\\nicib\\Documents\\FHTW\\4\\swen\\";
 
-        public DbTourReportService()
-        {
-            //_tourPlannerRepository = new TourPlannerRepository(tourLogHandler);
-        }
+        public DbTourReportService() { }
 
 
         public async Task<string> GenerateReportForTour(Tour tour, TourPlannerRepository tourPlanner)
@@ -62,7 +54,12 @@ namespace TourPlanner.DAL.Services
             document.Add(new Paragraph($"Estimated Time: {tour.EstimatedTime} hours"));
             document.Add(new Paragraph($"Transport Type: {tour.TransportType}"));
 
-            //var tourLogs = GetSampleTourLogs();
+            //placeholder image
+            string imagePath = "C:\\Users\\nicib\\source\\repos\\TourPlannerFinal\\TourPlanner.UI\\Images\\example_map_view.png";
+            ImageData imageData = ImageDataFactory.Create(imagePath);
+            Image image = new Image(imageData);
+            document.Add(image);
+
             var tourLogs = await tourPlanner.GetAllTourLogs(tour);
             if (tourLogs != null)
             {
