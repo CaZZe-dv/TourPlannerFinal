@@ -20,10 +20,14 @@ namespace TourPlanner.DAL.Services
             _mapService = mapService;
             _imageService = imageService;
         }
-
-        public async Task<BitmapSource?> GetRouteImage(string zoom, string x, string y)
+        public async Task<BitmapSource> GetImage(string tourId)
         {
-            return await _mapService.GenerateMapAsync(zoom, x, y);
+            return await _imageService.GetImage(tourId);
+        }
+
+        public async Task<BitmapSource?> GetRouteImage(string x, string y)
+        {
+            return await _mapService.GenerateMapAsync(x, y);
         }
 
         public async Task<RouteResponse?> GetRouteInformation(string transportType, string start, string end)
@@ -39,7 +43,7 @@ namespace TourPlanner.DAL.Services
         public async Task AddTour(Tour tour)
         {
             Guid id = await _tourHandler.CreateTour(tour);
-            //await _imageService.SaveImage(tour.RouteInformation, id.ToString());
+            await _imageService.SaveImage(tour.RouteInformation, id.ToString());
         }
 
         public async Task UpdateTour(Tour tour)

@@ -1,155 +1,198 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
+using System.Windows.Media;
+using System.Windows;
 
 namespace TourPlanner.BL.Services
 {
     public class MapService : IMapService
     {
-        public async Task<BitmapSource?> GenerateMapAsync(string zoomStr, string startStr, string endStr)
+        private const string TileUrl = "https://tile.openstreetmap.org/{0}/{1}/{2}.png";
+        private const int TileSize = 256;
+        private readonly HttpClient httpClient;
+
+        public MapService()
         {
-            try
+            httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Add("User-Agent", "CarSharingTest/1.0 Demo application for the SAM-course");
+        }
+
+        public async Task<Bitmap> DownloadMapTiles((double latitude, double longitude) start, (double latitude, double longitude) end, int zoom)
+        {
+            int xStart, yStart, xEnd, yEnd;
+            (xStart, yStart) = LatLongToTile(start.latitude, start.longitude, zoom);
+            (xEnd, yEnd) = LatLongToTile(end.latitude, end.longitude, zoom);
+
+            int minX = Math.Min(xStart, xEnd);
+            int maxX = Math.Max(xStart, xEnd);
+            int minY = Math.Min(yStart, yEnd);
+            int maxY = Math.Max(yStart, yEnd);
+
+            int width = (maxX - minX + 1) * TileSize;
+            int height = (maxY - minY + 1) * TileSize;
+
+            Bitmap mapBitmap = new Bitmap(width, height);
+
+            for (int x = minX; x <= maxX; x++)
             {
-                // Parse zoom level
-                if (!int.TryParse(zoomStr, out int zoom))
+                for (int y = minY; y <= maxY; y++)
                 {
-                    // Return null if zoom level parsing fails
-                    return null;
-                }
-
-                // Parse start coordinates
-                string[] startCoords = startStr.Split(',');
-                if (startCoords.Length != 2 ||
-                    !double.TryParse(startCoords[0], NumberStyles.Float, CultureInfo.InvariantCulture, out double startLon) ||
-                    !double.TryParse(startCoords[1], NumberStyles.Float, CultureInfo.InvariantCulture, out double startLat))
-                {
-                    // Return null if start coordinates parsing fails
-                    return null;
-                }
-
-                // Parse end coordinates
-                string[] endCoords = endStr.Split(',');
-                if (endCoords.Length != 2 ||
-                    !double.TryParse(endCoords[0], NumberStyles.Float, CultureInfo.InvariantCulture, out double endLon) ||
-                    !double.TryParse(endCoords[1], NumberStyles.Float, CultureInfo.InvariantCulture, out double endLat))
-                {
-                    // Return null if end coordinates parsing fails
-                    return null;
-                }
-
-                // Determine the minimum and maximum coordinates
-                double minLon = Math.Min(startLon, endLon);
-                double minLat = Math.Min(startLat, endLat);
-                double maxLon = Math.Max(startLon, endLon);
-                double maxLat = Math.Max(startLat, endLat);
-
-                // Calculate the tile numbers for each corner of the bounding box
-                Tile topLeftTile = LatLonToTile(maxLat, minLon, zoom);
-                Tile bottomRightTile = LatLonToTile(minLat, maxLon, zoom);
-
-                // Determine the number of tiles to fetch in each dimension
-                int tilesX = bottomRightTile.X - topLeftTile.X + 1;
-                int tilesY = bottomRightTile.Y - topLeftTile.Y + 1;
-
-                using (var httpClient = new HttpClient())
-                {
-                    // Create a Bitmap to hold all the tiles
-                    Bitmap finalImage = new Bitmap(tilesX * 256, tilesY * 256);
-
-                    using (Graphics g = Graphics.FromImage(finalImage))
+                    string url = string.Format(TileUrl, zoom, x, y);
+                    using (HttpResponseMessage response = await httpClient.GetAsync(url))
+                    using (Stream stream = await response.Content.ReadAsStreamAsync())
+                    using (Bitmap tileBitmap = new Bitmap(stream))
                     {
-                        // Fetch and draw each tile
-                        for (int x = topLeftTile.X; x <= bottomRightTile.X; x++)
+                        using (Graphics g = Graphics.FromImage(mapBitmap))
                         {
-                            for (int y = topLeftTile.Y; y <= bottomRightTile.Y; y++)
-                            {
-                                Bitmap? tileBitmap = await FetchTileAsync(zoom, x, y);
-
-                                if (tileBitmap == null)
-                                {
-                                    // Return null if fetching a tile fails
-                                    return null;
-                                }
-
-                                // Calculate position to draw the tile
-                                int xPos = (x - topLeftTile.X) * 256;
-                                int yPos = (y - topLeftTile.Y) * 256;
-
-                                // Draw the tile onto the final image
-                                g.DrawImage(tileBitmap, xPos, yPos);
-                            }
+                            int offsetX = (x - minX) * TileSize;
+                            int offsetY = (y - minY) * TileSize;
+                            g.DrawImage(tileBitmap, offsetX, offsetY, TileSize, TileSize);
                         }
                     }
-
-                    // Convert the Bitmap to BitmapSource
-                    return ConvertBitmapToBitmapSource(finalImage);
                 }
             }
-            catch (Exception)
+
+            return mapBitmap;
+        }
+
+        public void DrawMarker(Graphics g, double latitude, double longitude, System.Drawing.Color color, int zoom, int minX, int minY)
+        {
+            const int markerSize = 10;
+            var (x, y) = LatLongToPixel(latitude, longitude, zoom);
+            int pixelX = x - minX * TileSize;
+            int pixelY = y - minY * TileSize;
+
+            using (System.Drawing.Brush brush = new SolidBrush(color))
             {
-                // Return null if an exception occurs
-                return null;
+                g.FillEllipse(brush, pixelX - markerSize / 2, pixelY - markerSize / 2, markerSize, markerSize);
             }
         }
 
-        private async Task<Bitmap?> FetchTileAsync(int zoom, int x, int y)
+        public void DrawRoute(Graphics g, (double latitude, double longitude) start, (double latitude, double longitude) end, System.Drawing.Color color, int zoom, int minX, int minY)
         {
-            string tileUrl = $"https://tile.openstreetmap.org/{zoom}/{x}/{y}.png";
+            var (xStart, yStart) = LatLongToPixel(start.latitude, start.longitude, zoom);
+            var (xEnd, yEnd) = LatLongToPixel(end.latitude, end.longitude, zoom);
 
-            try
+            int pixelXStart = xStart - minX * TileSize;
+            int pixelYStart = yStart - minY * TileSize;
+            int pixelXEnd = xEnd - minX * TileSize;
+            int pixelYEnd = yEnd - minY * TileSize;
+
+            using (System.Drawing.Pen pen = new System.Drawing.Pen(color, 2))
             {
-                using (var httpClient = new HttpClient())
-                {
-                    var response = await httpClient.GetAsync(tileUrl);
-                    response.EnsureSuccessStatusCode();
-
-                    if (!response.Content.Headers.ContentType.MediaType.StartsWith("image"))
-                    {
-                        // Return null if the content type is not an image
-                        return null;
-                    }
-
-                    using (var stream = await response.Content.ReadAsStreamAsync())
-                    {
-                        return new Bitmap(stream);
-                    }
-                }
+                g.DrawLine(pen, pixelXStart, pixelYStart, pixelXEnd, pixelYEnd);
             }
-            catch
+        }
+
+        private (int, int) LatLongToTile(double latitude, double longitude, int zoom)
+        {
+            double latRad = Math.PI * latitude / 180.0;
+            double n = Math.Pow(2, zoom);
+            int xTile = (int)Math.Floor((longitude + 180.0) / 360.0 * n);
+            int yTile = (int)Math.Floor((1.0 - Math.Log(Math.Tan(latRad) + (1 / Math.Cos(latRad))) / Math.PI) / 2.0 * n);
+            return (xTile, yTile);
+        }
+
+        private (int, int) LatLongToPixel(double latitude, double longitude, int zoom)
+        {
+            double latRad = Math.PI * latitude / 180.0;
+            double n = Math.Pow(2, zoom) * TileSize;
+            int xPixel = (int)Math.Floor((longitude + 180.0) / 360.0 * n);
+            int yPixel = (int)Math.Floor((1.0 - Math.Log(Math.Tan(latRad) + (1 / Math.Cos(latRad))) / Math.PI) / 2.0 * n);
+            return (xPixel, yPixel);
+        }
+
+        private double HaversineDistance((double latitude, double longitude) point1, (double latitude, double longitude) point2)
+        {
+            const double R = 6371; // Radius of the Earth in km
+            double dLat = (point2.latitude - point1.latitude) * Math.PI / 180.0;
+            double dLon = (point2.longitude - point1.longitude) * Math.PI / 180.0;
+
+            double a = Math.Sin(dLat / 2) * Math.Sin(dLat / 2) +
+                       Math.Cos(point1.latitude * Math.PI / 180.0) * Math.Cos(point2.latitude * Math.PI / 180.0) *
+                       Math.Sin(dLon / 2) * Math.Sin(dLon / 2);
+            double c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
+            double distance = R * c;
+
+            return distance;
+        }
+
+        private int CalculateZoomLevel(double distance)
+        {
+            if (distance < 1) return 15; // For distances less than 1 km
+            else if (distance < 5) return 14;
+            else if (distance < 10) return 13;
+            else if (distance < 20) return 12;
+            else if (distance < 50) return 11;
+            else if (distance < 100) return 10;
+            else if (distance < 200) return 9;
+            else if (distance < 500) return 8;
+            else if (distance < 1000) return 7;
+            else return 6; // For distances more than 1000 km
+        }
+
+        public async Task<BitmapSource?> GenerateMapAsync(string startStr, string endStr)
+        {
+            var startCoords = ParseCoordinates(startStr);
+            var endCoords = ParseCoordinates(endStr);
+
+            double distance = HaversineDistance(startCoords, endCoords);
+            int zoom = CalculateZoomLevel(distance);
+
+            // Download tiles and draw route
+            Bitmap mapBitmap = await DownloadMapTiles(startCoords, endCoords, zoom);
+            using (Graphics g = Graphics.FromImage(mapBitmap))
             {
-                // Return null if an exception occurs during fetching the tile
-                return null;
+                (int xStart, int yStart) = LatLongToTile(startCoords.latitude, startCoords.longitude, zoom);
+                (int xEnd, int yEnd) = LatLongToTile(endCoords.latitude, endCoords.longitude, zoom);
+                int minX = Math.Min(xStart, xEnd);
+                int minY = Math.Min(yStart, yEnd);
+
+                DrawMarker(g, startCoords.latitude, startCoords.longitude, System.Drawing.Color.Red, zoom, minX, minY);
+                DrawMarker(g, endCoords.latitude, endCoords.longitude, System.Drawing.Color.Green, zoom, minX, minY);
+                DrawRoute(g, startCoords, endCoords, System.Drawing.Color.Blue, zoom, minX, minY);
+            }
+            return ConvertBitmapToBitmapSource(mapBitmap);
+        }
+
+        private (double latitude, double longitude) ParseCoordinates(string coordinatesStr)
+        {
+            var parts = coordinatesStr.Split(',');
+            if (parts.Length != 2)
+                throw new ArgumentException("Invalid coordinates format. Expected format: 'latitude,longitude'.");
+
+            if (double.TryParse(parts[0], NumberStyles.Float, CultureInfo.InvariantCulture, out double longitude) &&
+                double.TryParse(parts[1], NumberStyles.Float, CultureInfo.InvariantCulture, out double latitude))
+            {
+                return (latitude, longitude);
+            }
+            else
+            {
+                throw new ArgumentException("Invalid coordinates values.");
             }
         }
 
         private BitmapSource ConvertBitmapToBitmapSource(Bitmap bitmap)
         {
-            using (MemoryStream memory = new MemoryStream())
+            using (var memoryStream = new MemoryStream())
             {
-                bitmap.Save(memory, System.Drawing.Imaging.ImageFormat.Bmp);
-                memory.Position = 0;
-                BitmapImage bitmapImage = new BitmapImage();
+                bitmap.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Png);
+                memoryStream.Seek(0, SeekOrigin.Begin);
+
+                var bitmapImage = new BitmapImage();
                 bitmapImage.BeginInit();
-                bitmapImage.StreamSource = memory;
                 bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+                bitmapImage.StreamSource = memoryStream;
                 bitmapImage.EndInit();
                 bitmapImage.Freeze();
+
                 return bitmapImage;
             }
-        }
-
-        private record Tile(int X, int Y);
-
-        private Tile LatLonToTile(double lat, double lon, int zoom)
-        {
-            double latRad = Math.PI * lat / 180.0;
-            double n = Math.Pow(2, zoom);
-            int xTile = (int)Math.Floor((lon + 180.0) / 360.0 * n);
-            int yTile = (int)Math.Floor((1.0 - Math.Log(Math.Tan(latRad) + (1 / Math.Cos(latRad))) / Math.PI) / 2.0 * n);
-            return new Tile(xTile, yTile);
         }
     }
 }

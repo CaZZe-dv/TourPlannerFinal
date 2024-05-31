@@ -45,7 +45,7 @@ namespace TourPlanner.UI.Commands
         {
             RouteResponse? routeResponse = await _tourPlannerRepository.GetRouteInformation(_addTourViewModel.AddTourTransportType,
                 _addTourViewModel.AddTourFrom, _addTourViewModel.AddTourTo);
-            BitmapSource? image = await _tourPlannerRepository.GetRouteImage("14", routeResponse.Start, routeResponse.End);
+            BitmapSource? image = await _tourPlannerRepository.GetRouteImage(routeResponse.Start, routeResponse.End);
             if (routeResponse != null && image != null)
             {
                 _addTourViewModel.AddTourDistance = routeResponse.Distance.ToString();

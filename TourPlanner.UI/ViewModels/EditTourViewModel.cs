@@ -88,8 +88,8 @@ namespace TourPlanner.UI.ViewModels
             }
         }
 
-        private BitmapImage _editTourImage;
-        public BitmapImage EditTourImage
+        private BitmapSource _editTourImage;
+        public BitmapSource EditTourImage
         {
             get => _editTourImage;
             set
@@ -126,6 +126,8 @@ namespace TourPlanner.UI.ViewModels
 
         public ICommand LoadRouteInformation { get; }
 
+        public ICommand LoadImageFromFile { get; }
+
         public EditTourViewModel(TourPlannerRepository tourPlannerManager, NavigationService navigationService, SharedDataService sharedDataService)
         {
             IsTourChanged = false;
@@ -144,6 +146,8 @@ namespace TourPlanner.UI.ViewModels
             UpdateEditTourCommand = new UpdateEditTourCommand(this, tourPlannerManager, navigationService, sharedDataService);
             CancelEditTourCommand = new CancelEditTourCommand(navigationService);
             LoadRouteInformation = new EditLoadRouteInformationCommand(this, tourPlannerManager);
+            LoadImageFromFile = new LoadImageFromFileCommand(this, tourPlannerManager, sharedDataService);
+            LoadImageFromFile.Execute(null);
         }
     }
 }

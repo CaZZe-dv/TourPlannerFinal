@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows.Media.Imaging;
 using TourPlanner.BL.Services;
 using TourPlanner.DAL.Services;
 using TourPlanner.UI.ViewModels;
@@ -44,21 +45,14 @@ namespace TourPlanner.UI.Commands
         {
             RouteResponse? routeResponse = await _tourPlannerRepository.GetRouteInformation(_editTourViewModel.EditTourTransportType,
                 _editTourViewModel.EditTourFrom, _editTourViewModel.EditTourTo);
-            //BitmapImage? image = await _tourPlannerRepository.GetRouteImage("1", _editTourViewModel.EditTourFrom, _editTourViewModel.EditTourTo);
-            if (routeResponse != null /** && image != null**/)
+            BitmapSource? image = await _tourPlannerRepository.GetRouteImage(_editTourViewModel.EditTourFrom, _editTourViewModel.EditTourTo);
+            if (routeResponse != null && image != null)
             {
                 _editTourViewModel.EditTourDistance = routeResponse.Distance.ToString();
                 _editTourViewModel.EditTourEstimatedTime = TimeSpan.FromMinutes(routeResponse.Duration).ToString();
-                //_editTourViewModel.EditTourImage = image;
+                _editTourViewModel.EditTourImage = image;
                 _editTourViewModel.IsRouteInformationFetched = true;
-                return;
             }
-            _editTourViewModel.EditTourFrom = string.Empty;
-            _editTourViewModel.EditTourTo = string.Empty;
-            //_editTourViewModel.EditTourTransportType = string.Empty;
-            _editTourViewModel.EditTourDistance = string.Empty;
-            _editTourViewModel.EditTourEstimatedTime = string.Empty;
-            //_editTourViewModel.EditTourImage = null;
         }
     }
 }

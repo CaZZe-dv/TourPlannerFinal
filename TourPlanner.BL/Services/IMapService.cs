@@ -9,6 +9,6 @@ namespace TourPlanner.BL.Services
 {
     public interface IMapService
     {
-        Task<BitmapSource?> GenerateMapAsync(string zoomStr, string start, string end);
+        Task<BitmapSource?> GenerateMapAsync(string startStr, string endStr);
     }
 }
