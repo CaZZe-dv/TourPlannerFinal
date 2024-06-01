@@ -144,7 +144,6 @@ namespace TourPlanner.UI.ViewModels
         {
             logger.Info("Initializing EditTourViewModel.");
 
-            IsTourChanged = false;
             IsRouteInformationFetched = true;
 
             Tour existingTour = sharedDataService.SelectedTour;
@@ -165,6 +164,8 @@ namespace TourPlanner.UI.ViewModels
             LoadImageFromFile = new LoadImageFromFileCommand(this, tourPlannerManager, sharedDataService);
 
             LoadImageFromFile.Execute(null);
+
+            IsTourChanged = false;
             logger.Info("Executed LoadImageFromFile command.");
         }
     }
