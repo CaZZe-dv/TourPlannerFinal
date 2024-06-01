@@ -25,8 +25,8 @@
             <Button Content="Route" FontSize="24" MinWidth="100"/>
             <Button Content="Misc" FontSize="24" MinWidth="100"/>
         </StackPanel>
-        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-            <Image Grid.Row="1" Source="{Binding MainMenuImage}"/>
+        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Grid.Row="1">
+            <Image Source="{Binding MainMenuImage}"/>
         </ScrollViewer>
         <views:ManageActionView Grid.Row="2"
                                 ManageActionViewText="Tour Logs"
