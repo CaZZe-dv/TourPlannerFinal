@@ -31,6 +31,7 @@ namespace TourPlanner.UI.Commands
             {
                 OnCanExecuteChanged();
                 _addTourViewModel.IsRouteInformationFetched = false;
+                ResetTourInformationDisplay();
             }
         }
 
@@ -45,14 +46,26 @@ namespace TourPlanner.UI.Commands
         {
             RouteResponse? routeResponse = await _tourPlannerRepository.GetRouteInformation(_addTourViewModel.AddTourTransportType,
                 _addTourViewModel.AddTourFrom, _addTourViewModel.AddTourTo);
-            BitmapSource? image = await _tourPlannerRepository.GetRouteImage(routeResponse.Start, routeResponse.End);
-            if (routeResponse != null && image != null)
+            if (routeResponse != null)
             {
-                _addTourViewModel.AddTourDistance = routeResponse.Distance.ToString();
-                _addTourViewModel.AddTourEstimatedTime = TimeSpan.FromMinutes(routeResponse.Duration).ToString();
-                _addTourViewModel.AddTourImage = image;
-                _addTourViewModel.IsRouteInformationFetched = true;
+                BitmapSource? image = await _tourPlannerRepository.GetRouteImage(routeResponse.Start, routeResponse.End);
+                if (image != null)
+                {
+                    _addTourViewModel.AddTourDistance = routeResponse.Distance.ToString();
+                    _addTourViewModel.AddTourEstimatedTime = TimeSpan.FromMinutes(routeResponse.Duration).ToString();
+                    _addTourViewModel.AddTourImage = image;
+                    _addTourViewModel.IsRouteInformationFetched = true;
+                    return;
+                }
             }
+            ResetTourInformationDisplay();
+        }
+
+        private void ResetTourInformationDisplay()
+        {
+            _addTourViewModel.AddTourDistance = string.Empty;
+            _addTourViewModel.AddTourEstimatedTime = string.Empty;
+            _addTourViewModel.AddTourImage = null;
         }
     }
 }

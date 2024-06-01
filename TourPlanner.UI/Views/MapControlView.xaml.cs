@@ -1,4 +1,6 @@
-﻿using System.Windows.Controls;
+﻿using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media.Imaging;
 
 namespace TourPlanner.UI.Views
 {
@@ -7,6 +9,7 @@ namespace TourPlanner.UI.Views
     /// </summary>
     public partial class MapControlView : UserControl
     {
+
         public MapControlView()
         {
             InitializeComponent();

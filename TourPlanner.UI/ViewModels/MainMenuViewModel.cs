@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
 using TourPlanner.BL.Models;
 using TourPlanner.DAL.Services;
 using TourPlanner.UI.Commands;
@@ -47,8 +48,12 @@ namespace TourPlanner.UI.ViewModels
                 OnPropertyChanged(nameof(SelectedTour));
                 _sharedDataService.SelectedTour = _selectedTour != null ? SelectedTour.Tour : null;
                 TourIsChoosen = SelectedTour != null;
-                if (SelectedTour != null)
+                if (SelectedTour != null) 
+                { 
                     LoadTourLogCommand.Execute(null);
+                    LoadImageCommand.Execute(null);
+                }
+
             }
         }
 
@@ -107,6 +112,20 @@ namespace TourPlanner.UI.ViewModels
             }
         }
 
+        private BitmapSource _mainMenuImage;
+
+        public BitmapSource MainMenuImage
+        {
+            get => _mainMenuImage;
+            set
+            {
+                _mainMenuImage = value;
+                OnPropertyChanged(nameof(MainMenuImage));
+            }
+        }
+
+        public ICommand LoadImageCommand { get; }
+
         public MainMenuViewModel(TourPlannerRepository tourPlannerManager, NavigationService addTourNavigationService, NavigationService editTourNavigationService,
             NavigationService addTourLogNavigationService, NavigationService editTourLogNavigationService, SharedDataService sharedDataService)
         {
@@ -127,6 +146,8 @@ namespace TourPlanner.UI.ViewModels
             LoadTourCommand.Execute(null);
 
             LoadTourLogCommand = new LoadTourLogCommand(tourPlannerManager, this);
+
+            LoadImageCommand = new LoadImageCommand(this, tourPlannerManager, sharedDataService);
         }
 
         public void UpdateTours(IEnumerable<Tour> tours)

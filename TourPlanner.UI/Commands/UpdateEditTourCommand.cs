@@ -31,6 +31,7 @@ namespace TourPlanner.UI.Commands
                 && !string.IsNullOrEmpty(_editTourViewModel.EditTourTransportType)
                 && !string.IsNullOrEmpty(_editTourViewModel.EditTourDistance)
                 && !string.IsNullOrEmpty(_editTourViewModel.EditTourEstimatedTime)
+                && _editTourViewModel.EditTourImage != null
                 && _editTourViewModel.IsRouteInformationFetched
                 && _editTourViewModel.IsTourChanged;
         }
@@ -43,6 +44,7 @@ namespace TourPlanner.UI.Commands
                 e.PropertyName == nameof(_editTourViewModel.EditTourTransportType) ||
                 e.PropertyName == nameof(_editTourViewModel.EditTourDistance) ||
                 e.PropertyName == nameof(_editTourViewModel.EditTourEstimatedTime) ||
+                e.PropertyName == nameof(_editTourViewModel.EditTourImage) ||
                 e.PropertyName == nameof(_editTourViewModel.IsRouteInformationFetched))
             {
                 OnCanExecuteChanged();
@@ -60,7 +62,7 @@ namespace TourPlanner.UI.Commands
                 _editTourViewModel.EditTourTransportType,
                 float.Parse(_editTourViewModel.EditTourDistance),
                 TimeSpan.Parse(_editTourViewModel.EditTourEstimatedTime),
-                null);
+                _editTourViewModel.EditTourImage);
             await _tourPlannerManager.UpdateTour(updatedTour);
             _navigationService.Navigate();
         }

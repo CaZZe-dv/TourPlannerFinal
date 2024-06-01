@@ -31,6 +31,7 @@ namespace TourPlanner.UI.Commands
             {
                 OnCanExecuteChanged();
                 _editTourViewModel.IsRouteInformationFetched = false;
+                ResetTourInformationDisplay();
             }
         }
 
@@ -45,14 +46,26 @@ namespace TourPlanner.UI.Commands
         {
             RouteResponse? routeResponse = await _tourPlannerRepository.GetRouteInformation(_editTourViewModel.EditTourTransportType,
                 _editTourViewModel.EditTourFrom, _editTourViewModel.EditTourTo);
-            BitmapSource? image = await _tourPlannerRepository.GetRouteImage(_editTourViewModel.EditTourFrom, _editTourViewModel.EditTourTo);
-            if (routeResponse != null && image != null)
+            if (routeResponse != null)
             {
-                _editTourViewModel.EditTourDistance = routeResponse.Distance.ToString();
-                _editTourViewModel.EditTourEstimatedTime = TimeSpan.FromMinutes(routeResponse.Duration).ToString();
-                _editTourViewModel.EditTourImage = image;
-                _editTourViewModel.IsRouteInformationFetched = true;
+                BitmapSource? image = await _tourPlannerRepository.GetRouteImage(routeResponse.Start, routeResponse.End);
+                if (image != null)
+                {
+                    _editTourViewModel.EditTourDistance = routeResponse.Distance.ToString();
+                    _editTourViewModel.EditTourEstimatedTime = TimeSpan.FromMinutes(routeResponse.Duration).ToString();
+                    _editTourViewModel.EditTourImage = image;
+                    _editTourViewModel.IsRouteInformationFetched = true;
+                    return;
+                }
             }
+            ResetTourInformationDisplay();
+        }
+
+        private void ResetTourInformationDisplay()
+        {
+            _editTourViewModel.EditTourDistance = string.Empty;
+            _editTourViewModel.EditTourEstimatedTime = string.Empty;
+            _editTourViewModel.EditTourImage = null;
         }
     }
 }

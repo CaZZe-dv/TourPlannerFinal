@@ -7,6 +7,7 @@
              xmlns:views="clr-namespace:TourPlanner.UI.Views"
              xmlns:converter="clr-namespace:TourPlanner.UI.Converters" xmlns:loadingspinnercontrol="clr-namespace:LoadingSpinnerControl;assembly=LoadingSpinnerControl"
              mc:Ignorable="d" 
+             x:Name="root"
              d:DesignHeight="450" d:DesignWidth="600">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
@@ -24,7 +25,9 @@
             <Button Content="Route" FontSize="24" MinWidth="100"/>
             <Button Content="Misc" FontSize="24" MinWidth="100"/>
         </StackPanel>
-        <Image Grid.Row="1" Source="../Images/example_map_view.png"/>
+        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+            <Image Grid.Row="1" Source="{Binding MainMenuImage}"/>
+        </ScrollViewer>
         <views:ManageActionView Grid.Row="2"
                                 ManageActionViewText="Tour Logs"
                                 ButtonPlus="{Binding MapControlViewButtonPlus}"

@@ -49,11 +49,13 @@ namespace TourPlanner.DAL.Services
         public async Task UpdateTour(Tour tour)
         {
             await _tourHandler.UpdateTour(tour);
+            await _imageService.SaveImage(tour.RouteInformation,tour.Id.ToString());
         }
 
         public async Task DeleteTour(Tour tour)
         {
             await _tourHandler.DeleteTour(tour);
+            await _imageService.RemoveImage(tour.Id.ToString());
         }
 
         public async Task UpdateTourLog(TourLog tourLog)
