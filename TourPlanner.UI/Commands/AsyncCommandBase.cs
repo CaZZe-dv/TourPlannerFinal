@@ -1,7 +1,12 @@
-﻿namespace TourPlanner.UI.Commands
+﻿using System;
+using System.Threading.Tasks;
+using TourPlanner.Utility.Logging;
+
+namespace TourPlanner.UI.Commands
 {
     public abstract class AsyncCommandBase : CommandBase
     {
+        private static readonly ILoggerWrapper logger = Utility.Logging.LoggerFactory.GetLogger();
 
         private bool _isExecuting;
         private bool IsExecuting
@@ -16,16 +21,28 @@
 
         public override bool CanExecute(object parameter)
         {
-            return base.CanExecute(parameter) && !IsExecuting;
+            bool canExecute = base.CanExecute(parameter) && !IsExecuting;
+            logger.Debug($"CanExecute: {canExecute}");
+            return canExecute;
         }
 
-        public override async void Execute(object paramter)
+        public override async void Execute(object parameter)
         {
+            logger.Info("Executing AsyncCommandBase.");
             IsExecuting = true;
 
-            await ExecuteAsync(paramter);
-
-            IsExecuting = false;
+            try
+            {
+                await ExecuteAsync(parameter);
+            }
+            catch (Exception ex)
+            {
+                logger.Error($"Error executing async command: {ex.Message}");
+            }
+            finally
+            {
+                IsExecuting = false;
+            }
         }
 
         public abstract Task ExecuteAsync(object parameter);

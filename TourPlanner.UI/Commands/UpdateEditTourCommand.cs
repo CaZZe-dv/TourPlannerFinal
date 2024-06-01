@@ -1,8 +1,11 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
+using System.Threading.Tasks;
 using TourPlanner.BL.Models;
 using TourPlanner.DAL.Services;
 using TourPlanner.UI.Services;
 using TourPlanner.UI.ViewModels;
+using TourPlanner.Utility.Logging;
 
 namespace TourPlanner.UI.Commands
 {
@@ -12,6 +15,8 @@ namespace TourPlanner.UI.Commands
         private readonly TourPlannerRepository _tourPlannerManager;
         private readonly EditTourViewModel _editTourViewModel;
         private readonly SharedDataService _sharedDataService;
+
+        private static readonly ILoggerWrapper logger = Utility.Logging.LoggerFactory.GetLogger();
 
         public UpdateEditTourCommand(EditTourViewModel editTourViewModel, TourPlannerRepository tourPlannerManager, NavigationService navigationService, SharedDataService sharedDataService)
         {
@@ -54,17 +59,27 @@ namespace TourPlanner.UI.Commands
 
         public override async Task ExecuteAsync(object? parameter)
         {
-            Tour updatedTour = new Tour(_sharedDataService.SelectedTour.Id,
-                _editTourViewModel.EditTourName,
-                _editTourViewModel.EditTourDescription,
-                _editTourViewModel.EditTourFrom,
-                _editTourViewModel.EditTourTo,
-                _editTourViewModel.EditTourTransportType,
-                float.Parse(_editTourViewModel.EditTourDistance),
-                TimeSpan.Parse(_editTourViewModel.EditTourEstimatedTime),
-                _editTourViewModel.EditTourImage);
-            await _tourPlannerManager.UpdateTour(updatedTour);
-            _navigationService.Navigate();
+            logger.Info("Updating tour...");
+            try
+            {
+                Tour updatedTour = new Tour(_sharedDataService.SelectedTour.Id,
+                    _editTourViewModel.EditTourName,
+                    _editTourViewModel.EditTourDescription,
+                    _editTourViewModel.EditTourFrom,
+                    _editTourViewModel.EditTourTo,
+                    _editTourViewModel.EditTourTransportType,
+                    float.Parse(_editTourViewModel.EditTourDistance),
+                    TimeSpan.Parse(_editTourViewModel.EditTourEstimatedTime),
+                    _editTourViewModel.EditTourImage);
+                await _tourPlannerManager.UpdateTour(updatedTour);
+                logger.Info("Tour updated successfully.");
+                _navigationService.Navigate();
+            }
+            catch (Exception ex)
+            {
+                logger.Error($"Error occurred while updating tour: {ex.Message}");
+                // Handle the exception
+            }
         }
     }
 }

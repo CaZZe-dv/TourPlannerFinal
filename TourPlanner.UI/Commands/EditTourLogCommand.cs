@@ -1,6 +1,8 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using TourPlanner.UI.Services;
 using TourPlanner.UI.ViewModels;
+using TourPlanner.Utility.Logging;
 
 namespace TourPlanner.UI.Commands
 {
@@ -8,6 +10,8 @@ namespace TourPlanner.UI.Commands
     {
         private readonly NavigationService _navigationService;
         private readonly MainMenuViewModel _mainMenuViewModel;
+
+        private static readonly ILoggerWrapper logger = Utility.Logging.LoggerFactory.GetLogger();
 
         public EditTourLogCommand(MainMenuViewModel mainMenuViewModel, NavigationService navigationService)
         {
@@ -26,12 +30,16 @@ namespace TourPlanner.UI.Commands
 
         public override bool CanExecute(object? parameter)
         {
-            return _mainMenuViewModel.SelectedTourLog != null && base.CanExecute(parameter);
+            bool canExecute = _mainMenuViewModel.SelectedTourLog != null && base.CanExecute(parameter);
+            logger.Debug($"EditTourLogCommand CanExecute: {canExecute}");
+            return canExecute;
         }
 
         public override void Execute(object? parameter)
         {
+            logger.Info("Navigating to edit tour log view...");
             _navigationService.Navigate();
+            logger.Info("Navigation to edit tour log view completed.");
         }
     }
 }

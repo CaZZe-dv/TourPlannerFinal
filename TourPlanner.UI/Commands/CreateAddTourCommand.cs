@@ -1,8 +1,11 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
+using System.Threading.Tasks;
 using TourPlanner.BL.Models;
 using TourPlanner.DAL.Services;
 using TourPlanner.UI.Services;
 using TourPlanner.UI.ViewModels;
+using TourPlanner.Utility.Logging;
 
 namespace TourPlanner.UI.Commands
 {
@@ -11,6 +14,9 @@ namespace TourPlanner.UI.Commands
         private readonly NavigationService _navigationService;
         private readonly AddTourViewModel _addTourViewModel;
         private readonly TourPlannerRepository _tourPlannerManager;
+
+        private static readonly ILoggerWrapper logger = Utility.Logging.LoggerFactory.GetLogger();
+
         public CreateAddTourCommand(AddTourViewModel addTourViewModel, TourPlannerRepository tourPlannerManager, NavigationService navigationService)
         {
             _addTourViewModel = addTourViewModel;
@@ -37,28 +43,46 @@ namespace TourPlanner.UI.Commands
 
         public override bool CanExecute(object parameter)
         {
-            return base.CanExecute(parameter) && !string.IsNullOrEmpty(_addTourViewModel.AddTourName)
-                && !string.IsNullOrEmpty(_addTourViewModel.AddTourFrom)
-                && !string.IsNullOrEmpty(_addTourViewModel.AddTourTo)
-                && !string.IsNullOrEmpty(_addTourViewModel.AddTourDescription)
-                && !string.IsNullOrEmpty(_addTourViewModel.AddTourTransportType)
-                && !string.IsNullOrEmpty(_addTourViewModel.AddTourDistance)
-                && !string.IsNullOrEmpty(_addTourViewModel.AddTourEstimatedTime)
-                && _addTourViewModel.IsRouteInformationFetched
-                && _addTourViewModel.AddTourImage != null;
+            bool canExecute = base.CanExecute(parameter) &&
+                !string.IsNullOrEmpty(_addTourViewModel.AddTourName) &&
+                !string.IsNullOrEmpty(_addTourViewModel.AddTourFrom) &&
+                !string.IsNullOrEmpty(_addTourViewModel.AddTourTo) &&
+                !string.IsNullOrEmpty(_addTourViewModel.AddTourDescription) &&
+                !string.IsNullOrEmpty(_addTourViewModel.AddTourTransportType) &&
+                !string.IsNullOrEmpty(_addTourViewModel.AddTourDistance) &&
+                !string.IsNullOrEmpty(_addTourViewModel.AddTourEstimatedTime) &&
+                _addTourViewModel.IsRouteInformationFetched &&
+                _addTourViewModel.AddTourImage != null;
+
+            logger.Debug($"CreateAddTourCommand CanExecute: {canExecute}");
+
+            return canExecute;
         }
 
         public override async Task ExecuteAsync(object? parameter)
         {
-            await _tourPlannerManager.AddTour(new Tour(
-                _addTourViewModel.AddTourName,
-                _addTourViewModel.AddTourDescription,
-                _addTourViewModel.AddTourFrom,
-                _addTourViewModel.AddTourTo,
-                _addTourViewModel.AddTourTransportType,
-                float.Parse(_addTourViewModel.AddTourDistance),
-                TimeSpan.Parse(_addTourViewModel.AddTourEstimatedTime),
-                _addTourViewModel.AddTourImage));
+            logger.Info("Creating a new tour...");
+
+            try
+            {
+                await _tourPlannerManager.AddTour(new Tour(
+                    _addTourViewModel.AddTourName,
+                    _addTourViewModel.AddTourDescription,
+                    _addTourViewModel.AddTourFrom,
+                    _addTourViewModel.AddTourTo,
+                    _addTourViewModel.AddTourTransportType,
+                    float.Parse(_addTourViewModel.AddTourDistance),
+                    TimeSpan.Parse(_addTourViewModel.AddTourEstimatedTime),
+                    _addTourViewModel.AddTourImage));
+
+                logger.Info("New tour created successfully.");
+            }
+            catch (Exception ex)
+            {
+                logger.Error($"Error occurred while creating a new tour: {ex.Message}");
+                // Handle the exception
+            }
+
             _navigationService.Navigate();
         }
     }

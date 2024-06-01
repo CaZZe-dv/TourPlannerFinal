@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using TourPlanner.BL.Services;
 using TourPlanner.DAL.Services;
 using TourPlanner.UI.ViewModels;
+using TourPlanner.Utility.Logging;
 
 namespace TourPlanner.UI.Commands
 {
@@ -16,6 +13,9 @@ namespace TourPlanner.UI.Commands
     {
         private readonly EditTourViewModel _editTourViewModel;
         private readonly TourPlannerRepository _tourPlannerRepository;
+
+        private static readonly ILoggerWrapper logger = Utility.Logging.LoggerFactory.GetLogger();
+
         public EditLoadRouteInformationCommand(EditTourViewModel editTourViewModel, TourPlannerRepository tourPlannerRepository)
         {
             _editTourViewModel = editTourViewModel;
@@ -44,19 +44,29 @@ namespace TourPlanner.UI.Commands
 
         public override async Task ExecuteAsync(object parameter)
         {
-            RouteResponse? routeResponse = await _tourPlannerRepository.GetRouteInformation(_editTourViewModel.EditTourTransportType,
-                _editTourViewModel.EditTourFrom, _editTourViewModel.EditTourTo);
-            if (routeResponse != null)
+            logger.Info("Fetching route information...");
+            try
             {
-                BitmapSource? image = await _tourPlannerRepository.GetRouteImage(routeResponse.Start, routeResponse.End);
-                if (image != null)
+                RouteResponse? routeResponse = await _tourPlannerRepository.GetRouteInformation(_editTourViewModel.EditTourTransportType,
+                    _editTourViewModel.EditTourFrom, _editTourViewModel.EditTourTo);
+                if (routeResponse != null)
                 {
-                    _editTourViewModel.EditTourDistance = routeResponse.Distance.ToString();
-                    _editTourViewModel.EditTourEstimatedTime = TimeSpan.FromMinutes(routeResponse.Duration).ToString();
-                    _editTourViewModel.EditTourImage = image;
-                    _editTourViewModel.IsRouteInformationFetched = true;
-                    return;
+                    BitmapSource? image = await _tourPlannerRepository.GetRouteImage(routeResponse.Start, routeResponse.End);
+                    if (image != null)
+                    {
+                        _editTourViewModel.EditTourDistance = routeResponse.Distance.ToString();
+                        _editTourViewModel.EditTourEstimatedTime = TimeSpan.FromMinutes(routeResponse.Duration).ToString();
+                        _editTourViewModel.EditTourImage = image;
+                        _editTourViewModel.IsRouteInformationFetched = true;
+                        logger.Info("Route information fetched successfully.");
+                        return;
+                    }
                 }
+                logger.Warn("Failed to fetch route image.");
+            }
+            catch (Exception ex)
+            {
+                logger.Error($"Error fetching route information: {ex.Message}");
             }
             ResetTourInformationDisplay();
         }

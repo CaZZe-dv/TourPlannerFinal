@@ -1,26 +1,37 @@
-﻿using TourPlanner.BL.Models;
+﻿using System;
+using TourPlanner.BL.Models;
 using TourPlanner.DAL.Dtos;
+using TourPlanner.Utility.Logging;
 
 namespace TourPlanner.DAL.Services
 {
     public abstract class DatabaseConverter
     {
+        private static readonly ILoggerWrapper logger = Utility.Logging.LoggerFactory.GetLogger();
+
         protected Tour ToTour(TourDTO tourDTO)
         {
-            return new Tour(tourDTO.Id, tourDTO.Name, tourDTO.Description, tourDTO.From, tourDTO.To,
+            logger.Debug("Converting TourDTO to Tour.");
+            Tour tour = new Tour(tourDTO.Id, tourDTO.Name, tourDTO.Description, tourDTO.From, tourDTO.To,
                 tourDTO.TransportType, tourDTO.TourDistance, tourDTO.EstimatedTime, null);
+            logger.Debug("TourDTO converted to Tour successfully.");
+            return tour;
         }
 
         protected TourLog ToTourLog(TourLogDTO tourLogDTO)
         {
-            return new TourLog(tourLogDTO.Id, DateTime.Parse(tourLogDTO.DateTime), tourLogDTO.Comment,
+            logger.Debug("Converting TourLogDTO to TourLog.");
+            TourLog tourLog = new TourLog(tourLogDTO.Id, DateTime.Parse(tourLogDTO.DateTime), tourLogDTO.Comment,
                 tourLogDTO.Difficulty, tourLogDTO.TotalDistance, tourLogDTO.TotalTime,
                 tourLogDTO.Rating, tourLogDTO.TourId);
+            logger.Debug("TourLogDTO converted to TourLog successfully.");
+            return tourLog;
         }
 
         protected TourDTO ToTourDTO(Tour tour)
         {
-            return new TourDTO()
+            logger.Debug("Converting Tour to TourDTO.");
+            TourDTO tourDTO = new TourDTO()
             {
                 Name = tour.Name,
                 Description = tour.Description,
@@ -30,11 +41,14 @@ namespace TourPlanner.DAL.Services
                 TourDistance = tour.TourDistance,
                 EstimatedTime = tour.EstimatedTime,
             };
+            logger.Debug("Tour converted to TourDTO successfully.");
+            return tourDTO;
         }
 
         protected TourLogDTO ToTourLogDTO(TourLog tourLog)
         {
-            return new TourLogDTO()
+            logger.Debug("Converting TourLog to TourLogDTO.");
+            TourLogDTO tourLogDTO = new TourLogDTO()
             {
                 DateTime = tourLog.DateTime.ToString(),
                 Comment = tourLog.Comment,
@@ -44,6 +58,8 @@ namespace TourPlanner.DAL.Services
                 Rating = tourLog.Rating,
                 TourId = tourLog.TourId
             };
+            logger.Debug("TourLog converted to TourLogDTO successfully.");
+            return tourLogDTO;
         }
     }
 }

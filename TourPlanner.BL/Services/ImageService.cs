@@ -1,12 +1,15 @@
 ﻿using System;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
+using TourPlanner.Utility.Logging;
 
 namespace TourPlanner.BL.Services
 {
     public class ImageService : IImageService
     {
         private readonly string _imageDirectory;
+        private static readonly ILoggerWrapper logger = Utility.Logging.LoggerFactory.GetLogger();
 
         public ImageService(string imageDirectory)
         {
@@ -40,9 +43,11 @@ namespace TourPlanner.BL.Services
             if (File.Exists(filePath))
             {
                 File.Delete(filePath);
+                logger.Info($"Image removed successfully: {filePath}");
             }
             else
             {
+                logger.Warn($"Image not found: {filePath}");
                 throw new FileNotFoundException("Image not found.", filePath);
             }
         }
@@ -58,6 +63,7 @@ namespace TourPlanner.BL.Services
 
             // Save the image data to the file
             File.WriteAllBytes(filePath, imageData);
+            logger.Info($"Image saved successfully: {filePath}");
 
             return filePath;
         }
@@ -69,11 +75,13 @@ namespace TourPlanner.BL.Services
 
             if (!File.Exists(filePath))
             {
+                logger.Warn($"Image not found: {filePath}");
                 throw new FileNotFoundException("Image not found.", filePath);
             }
 
             // Read the image data from the file
             byte[] imageData = File.ReadAllBytes(filePath);
+            logger.Info($"Image retrieved successfully: {filePath}");
 
             // Convert byte[] to BitmapSource
             return ByteArrayToBitmapSource(imageData);

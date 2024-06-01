@@ -1,20 +1,25 @@
-﻿using System.Windows.Input;
+﻿using System.Collections.Generic;
+using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using TourPlanner.BL.Models;
 using TourPlanner.DAL.Services;
 using TourPlanner.UI.Commands;
 using TourPlanner.UI.Services;
+using TourPlanner.Utility.Logging;
 
 namespace TourPlanner.UI.ViewModels
 {
     public class EditTourViewModel : ViewModelBase
     {
+        private static readonly ILoggerWrapper logger = Utility.Logging.LoggerFactory.GetLogger();
+
         private string _editTourName;
         public string EditTourName
         {
             get => _editTourName;
             set
             {
+                logger.Info($"EditTourName changed from '{_editTourName}' to '{value}'");
                 _editTourName = value;
                 OnPropertyChanged(nameof(EditTourName));
             }
@@ -26,6 +31,7 @@ namespace TourPlanner.UI.ViewModels
             get => _editTourDescription;
             set
             {
+                logger.Info($"EditTourDescription changed from '{_editTourDescription}' to '{value}'");
                 _editTourDescription = value;
                 OnPropertyChanged(nameof(EditTourDescription));
             }
@@ -37,6 +43,7 @@ namespace TourPlanner.UI.ViewModels
             get => _editTourFrom;
             set
             {
+                logger.Info($"EditTourFrom changed from '{_editTourFrom}' to '{value}'");
                 _editTourFrom = value;
                 OnPropertyChanged(nameof(EditTourFrom));
             }
@@ -48,6 +55,7 @@ namespace TourPlanner.UI.ViewModels
             get => _editTourTo;
             set
             {
+                logger.Info($"EditTourTo changed from '{_editTourTo}' to '{value}'");
                 _editTourTo = value;
                 OnPropertyChanged(nameof(EditTourTo));
             }
@@ -61,6 +69,7 @@ namespace TourPlanner.UI.ViewModels
             get => _editTourTransportType;
             set
             {
+                logger.Info($"EditTourTransportType changed from '{_editTourTransportType}' to '{value}'");
                 _editTourTransportType = value;
                 OnPropertyChanged(nameof(EditTourTransportType));
             }
@@ -72,6 +81,7 @@ namespace TourPlanner.UI.ViewModels
             get => _editTourDistance;
             set
             {
+                logger.Info($"EditTourDistance changed from '{_editTourDistance}' to '{value}'");
                 _editTourDistance = value;
                 OnPropertyChanged(nameof(EditTourDistance));
             }
@@ -83,6 +93,7 @@ namespace TourPlanner.UI.ViewModels
             get => _editTourEstimatedTime;
             set
             {
+                logger.Info($"EditTourEstimatedTime changed from '{_editTourEstimatedTime}' to '{value}'");
                 _editTourEstimatedTime = value;
                 OnPropertyChanged(nameof(EditTourEstimatedTime));
             }
@@ -94,6 +105,7 @@ namespace TourPlanner.UI.ViewModels
             get => _editTourImage;
             set
             {
+                logger.Info($"EditTourImage changed");
                 _editTourImage = value;
                 OnPropertyChanged(nameof(EditTourImage));
             }
@@ -105,6 +117,7 @@ namespace TourPlanner.UI.ViewModels
             get => _isTourChanged;
             set
             {
+                logger.Info($"IsTourChanged changed from '{_isTourChanged}' to '{value}'");
                 _isTourChanged = value;
                 OnPropertyChanged(nameof(IsTourChanged));
             }
@@ -116,6 +129,7 @@ namespace TourPlanner.UI.ViewModels
             get => _isRouteInformationFetched;
             set
             {
+                logger.Info($"IsRouteInformationFetched changed from '{_isRouteInformationFetched}' to '{value}'");
                 _isRouteInformationFetched = value;
                 OnPropertyChanged(nameof(IsRouteInformationFetched));
             }
@@ -123,13 +137,13 @@ namespace TourPlanner.UI.ViewModels
 
         public ICommand UpdateEditTourCommand { get; }
         public ICommand CancelEditTourCommand { get; }
-
         public ICommand LoadRouteInformation { get; }
-
         public ICommand LoadImageFromFile { get; }
 
         public EditTourViewModel(TourPlannerRepository tourPlannerManager, NavigationService navigationService, SharedDataService sharedDataService)
         {
+            logger.Info("Initializing EditTourViewModel.");
+
             IsTourChanged = false;
             IsRouteInformationFetched = true;
 
@@ -143,11 +157,15 @@ namespace TourPlanner.UI.ViewModels
             _editTourDistance = existingTour.TourDistance.ToString();
             _editTourEstimatedTime = existingTour.EstimatedTime.ToString();
 
+            logger.Info("EditTourViewModel initialized with existing tour data.");
+
             UpdateEditTourCommand = new UpdateEditTourCommand(this, tourPlannerManager, navigationService, sharedDataService);
             CancelEditTourCommand = new CancelEditTourCommand(navigationService);
             LoadRouteInformation = new EditLoadRouteInformationCommand(this, tourPlannerManager);
             LoadImageFromFile = new LoadImageFromFileCommand(this, tourPlannerManager, sharedDataService);
+
             LoadImageFromFile.Execute(null);
+            logger.Info("Executed LoadImageFromFile command.");
         }
     }
 }

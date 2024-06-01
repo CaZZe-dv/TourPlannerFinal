@@ -1,15 +1,19 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using TourPlanner.BL.Models;
 using TourPlanner.DAL.Services;
 using TourPlanner.UI.Commands;
 using TourPlanner.UI.Services;
+using TourPlanner.Utility.Logging;
 
 namespace TourPlanner.UI.ViewModels
 {
     public class MainMenuViewModel : ViewModelBase
     {
+        private static readonly ILoggerWrapper logger = Utility.Logging.LoggerFactory.GetLogger();
+
         public ICommand MainMenuFileCommand { get; }
         public ICommand MainMenuEditCommand { get; }
         public ICommand MainMenuOptionsCommand { get; }
@@ -22,11 +26,11 @@ namespace TourPlanner.UI.ViewModels
             get => _searchBar;
             set
             {
+                logger.Info($"SearchBar changed from '{_searchBar}' to '{value}'");
                 _searchBar = value;
                 OnPropertyChanged(nameof(SearchBar));
             }
         }
-
 
         private readonly ObservableCollection<TourViewModel> _tours;
         public IEnumerable<TourViewModel> Tours => _tours;
@@ -44,16 +48,16 @@ namespace TourPlanner.UI.ViewModels
             get => _selectedTour;
             set
             {
+                logger.Info($"SelectedTour changed to '{value?.Tour?.Name}'");
                 _selectedTour = value;
                 OnPropertyChanged(nameof(SelectedTour));
                 _sharedDataService.SelectedTour = _selectedTour != null ? SelectedTour.Tour : null;
                 TourIsChoosen = SelectedTour != null;
-                if (SelectedTour != null) 
-                { 
+                if (SelectedTour != null)
+                {
                     LoadTourLogCommand.Execute(null);
                     LoadImageCommand.Execute(null);
                 }
-
             }
         }
 
@@ -63,6 +67,7 @@ namespace TourPlanner.UI.ViewModels
             get => _selectedTourLog;
             set
             {
+                logger.Info($"SelectedTourLog changed to '{value?.TourLog?.Comment}'");
                 _selectedTourLog = value;
                 OnPropertyChanged(nameof(SelectedTourLog));
                 _sharedDataService.SelectedTourLog = _selectedTourLog != null ? _selectedTourLog.TourLog : null;
@@ -72,9 +77,7 @@ namespace TourPlanner.UI.ViewModels
         private readonly SharedDataService _sharedDataService;
 
         public ICommand LoadTourCommand { get; }
-
         public ICommand LoadTourLogCommand { get; }
-
         public ICommand MapControlViewButtonPlus { get; }
         public ICommand MapControlViewButtonMinus { get; }
         public ICommand MapControlViewButtonEdit { get; }
@@ -85,6 +88,7 @@ namespace TourPlanner.UI.ViewModels
             get => _isLoadingTours;
             set
             {
+                logger.Info($"IsLoadingTours changed to '{value}'");
                 _isLoadingTours = value;
                 OnPropertyChanged(nameof(IsLoadingTours));
             }
@@ -96,6 +100,7 @@ namespace TourPlanner.UI.ViewModels
             get => _isLoadingTourLogs;
             set
             {
+                logger.Info($"IsLoadingTourLogs changed to '{value}'");
                 _isLoadingTourLogs = value;
                 OnPropertyChanged(nameof(IsLoadingTourLogs));
             }
@@ -107,6 +112,7 @@ namespace TourPlanner.UI.ViewModels
             get => _tourIsChoosen;
             set
             {
+                logger.Info($"TourIsChoosen changed to '{value}'");
                 _tourIsChoosen = value;
                 OnPropertyChanged(nameof(TourIsChoosen));
             }
@@ -119,6 +125,7 @@ namespace TourPlanner.UI.ViewModels
             get => _mainMenuImage;
             set
             {
+                logger.Info($"MainMenuImage changed");
                 _mainMenuImage = value;
                 OnPropertyChanged(nameof(MainMenuImage));
             }
@@ -129,6 +136,8 @@ namespace TourPlanner.UI.ViewModels
         public MainMenuViewModel(TourPlannerRepository tourPlannerManager, NavigationService addTourNavigationService, NavigationService editTourNavigationService,
             NavigationService addTourLogNavigationService, NavigationService editTourLogNavigationService, SharedDataService sharedDataService)
         {
+            logger.Info("Initializing MainMenuViewModel.");
+
             _sharedDataService = sharedDataService;
 
             _tours = new ObservableCollection<TourViewModel>();
@@ -144,14 +153,15 @@ namespace TourPlanner.UI.ViewModels
 
             LoadTourCommand = new LoadTourCommand(tourPlannerManager, this);
             LoadTourCommand.Execute(null);
+            logger.Info("Executed LoadTourCommand.");
 
             LoadTourLogCommand = new LoadTourLogCommand(tourPlannerManager, this);
-
             LoadImageCommand = new LoadImageCommand(this, tourPlannerManager, sharedDataService);
         }
 
         public void UpdateTours(IEnumerable<Tour> tours)
         {
+            logger.Info("Updating tours.");
             _tours.Clear();
 
             if (tours != null)
@@ -159,12 +169,14 @@ namespace TourPlanner.UI.ViewModels
                 foreach (Tour t in tours)
                 {
                     _tours.Add(new TourViewModel(t));
+                    logger.Info($"Added tour: {t.Name}");
                 }
             }
         }
 
         public void UpdateTourLogs(IEnumerable<TourLog> tourLogs)
         {
+            logger.Info("Updating tour logs.");
             _tourLogs.Clear();
 
             if (tourLogs != null)
@@ -172,9 +184,9 @@ namespace TourPlanner.UI.ViewModels
                 foreach (TourLog tl in tourLogs)
                 {
                     _tourLogs.Add(new TourLogViewModel(tl));
+                    logger.Info($"Added tour log: {tl.Comment}");
                 }
             }
         }
-
     }
 }

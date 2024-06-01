@@ -1,12 +1,15 @@
-﻿using System.Windows.Input;
+﻿using System;
+using System.Windows.Input;
 using TourPlanner.DAL.Services;
 using TourPlanner.UI.Commands;
 using TourPlanner.UI.Services;
+using TourPlanner.Utility.Logging;
 
 namespace TourPlanner.UI.ViewModels
 {
     public class AddTourLogViewModel : ViewModelBase
     {
+        private static readonly ILoggerWrapper logger = Utility.Logging.LoggerFactory.GetLogger();
 
         private DateTime _addTourLogDateTime;
         public DateTime AddTourLogDateTime
@@ -14,6 +17,7 @@ namespace TourPlanner.UI.ViewModels
             get => _addTourLogDateTime;
             set
             {
+                logger.Info($"AddTourLogDateTime changed from {_addTourLogDateTime} to {value}");
                 _addTourLogDateTime = value;
                 OnPropertyChanged(nameof(AddTourLogDateTime));
             }
@@ -25,6 +29,7 @@ namespace TourPlanner.UI.ViewModels
             get => _addTourLogComment;
             set
             {
+                logger.Info($"AddTourLogComment changed from '{_addTourLogComment}' to '{value}'");
                 _addTourLogComment = value;
                 OnPropertyChanged(nameof(AddTourLogComment));
             }
@@ -36,6 +41,7 @@ namespace TourPlanner.UI.ViewModels
             get => _addTourLogDifficulty;
             set
             {
+                logger.Info($"AddTourLogDifficulty changed from {_addTourLogDifficulty} to {value}");
                 _addTourLogDifficulty = value;
                 OnPropertyChanged(nameof(AddTourLogDifficulty));
             }
@@ -47,6 +53,7 @@ namespace TourPlanner.UI.ViewModels
             get => _addTourLogTotalDistance;
             set
             {
+                logger.Info($"AddTourLogTotalDistance changed from {_addTourLogTotalDistance} to {value}");
                 _addTourLogTotalDistance = value;
                 OnPropertyChanged(nameof(AddTourLogTotalDistance));
             }
@@ -58,6 +65,7 @@ namespace TourPlanner.UI.ViewModels
             get => _addTourLogTotalTime;
             set
             {
+                logger.Info($"AddTourLogTotalTime changed from {_addTourLogTotalTime} to {value}");
                 _addTourLogTotalTime = value;
                 OnPropertyChanged(nameof(AddTourLogTotalTime));
             }
@@ -69,6 +77,7 @@ namespace TourPlanner.UI.ViewModels
             get => _addTourLogRating;
             set
             {
+                logger.Info($"AddTourLogRating changed from {_addTourLogRating} to {value}");
                 _addTourLogRating = value;
                 OnPropertyChanged(nameof(AddTourLogRating));
             }
@@ -79,8 +88,12 @@ namespace TourPlanner.UI.ViewModels
 
         public AddTourLogViewModel(TourPlannerRepository tourPlannerManager, NavigationService navigationService, SharedDataService sharedDataService)
         {
+            logger.Info("Initializing AddTourLogViewModel.");
+
             CreateAddTourLogCommand = new CreateAddTourLogCommand(navigationService, tourPlannerManager, this, sharedDataService);
             CancelAddTourLogCommand = new CancelAddTourLogCommand(navigationService);
+
+            logger.Info("AddTourLogViewModel initialized successfully.");
         }
     }
 }

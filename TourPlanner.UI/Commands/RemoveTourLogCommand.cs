@@ -1,6 +1,9 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
+using System.Threading.Tasks;
 using TourPlanner.DAL.Services;
 using TourPlanner.UI.ViewModels;
+using TourPlanner.Utility.Logging;
 
 namespace TourPlanner.UI.Commands
 {
@@ -8,6 +11,8 @@ namespace TourPlanner.UI.Commands
     {
         private readonly MainMenuViewModel _mainMenuViewModel;
         private readonly TourPlannerRepository _tourPlannerManager;
+
+        private static readonly ILoggerWrapper logger = Utility.Logging.LoggerFactory.GetLogger();
 
         public RemoveTourLogCommand(MainMenuViewModel mainMenuViewModel, TourPlannerRepository tourPlannerManager)
         {
@@ -26,13 +31,25 @@ namespace TourPlanner.UI.Commands
 
         public override bool CanExecute(object parameter)
         {
-            return _mainMenuViewModel.SelectedTourLog != null && base.CanExecute(parameter);
+            bool canExecute = _mainMenuViewModel.SelectedTourLog != null && base.CanExecute(parameter);
+            logger.Debug($"RemoveTourLogCommand CanExecute: {canExecute}");
+            return canExecute;
         }
 
         public override async Task ExecuteAsync(object parameter)
         {
-            await _tourPlannerManager.DeleteTourLog(_mainMenuViewModel.SelectedTourLog.TourLog);
-            _mainMenuViewModel.LoadTourLogCommand.Execute(null);
+            logger.Info("Removing tour log...");
+            try
+            {
+                await _tourPlannerManager.DeleteTourLog(_mainMenuViewModel.SelectedTourLog.TourLog);
+                _mainMenuViewModel.LoadTourLogCommand.Execute(null);
+                logger.Info("Tour log removed successfully.");
+            }
+            catch (Exception ex)
+            {
+                logger.Error($"Error occurred while removing tour log: {ex.Message}");
+                // Handle the exception
+            }
         }
     }
 }

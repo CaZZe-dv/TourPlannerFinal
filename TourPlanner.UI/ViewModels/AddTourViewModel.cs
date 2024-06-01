@@ -6,17 +6,21 @@ using System.Windows.Media.Imaging;
 using TourPlanner.DAL.Services;
 using TourPlanner.UI.Commands;
 using TourPlanner.UI.Services;
+using TourPlanner.Utility.Logging;
 
 namespace TourPlanner.UI.ViewModels
 {
     public class AddTourViewModel : ViewModelBase
     {
+        private static readonly ILoggerWrapper logger = Utility.Logging.LoggerFactory.GetLogger();
+
         private string _addTourName;
         public string AddTourName
         {
             get => _addTourName;
             set
             {
+                logger.Info($"AddTourName changed from '{_addTourName}' to '{value}'");
                 _addTourName = value;
                 OnPropertyChanged(nameof(AddTourName));
             }
@@ -28,6 +32,7 @@ namespace TourPlanner.UI.ViewModels
             get => _addTourDescription;
             set
             {
+                logger.Info($"AddTourDescription changed from '{_addTourDescription}' to '{value}'");
                 _addTourDescription = value;
                 OnPropertyChanged(nameof(AddTourDescription));
             }
@@ -39,6 +44,7 @@ namespace TourPlanner.UI.ViewModels
             get => _addTourFrom;
             set
             {
+                logger.Info($"AddTourFrom changed from '{_addTourFrom}' to '{value}'");
                 _addTourFrom = value;
                 OnPropertyChanged(nameof(AddTourFrom));
             }
@@ -50,6 +56,7 @@ namespace TourPlanner.UI.ViewModels
             get => _addTourTo;
             set
             {
+                logger.Info($"AddTourTo changed from '{_addTourTo}' to '{value}'");
                 _addTourTo = value;
                 OnPropertyChanged(nameof(AddTourTo));
             }
@@ -63,6 +70,7 @@ namespace TourPlanner.UI.ViewModels
             get => _addTourTransportType;
             set
             {
+                logger.Info($"AddTourTransportType changed from '{_addTourTransportType}' to '{value}'");
                 _addTourTransportType = value;
                 OnPropertyChanged(nameof(AddTourTransportType));
             }
@@ -74,6 +82,7 @@ namespace TourPlanner.UI.ViewModels
             get => _addTourDistance;
             set
             {
+                logger.Info($"AddTourDistance changed from '{_addTourDistance}' to '{value}'");
                 _addTourDistance = value;
                 OnPropertyChanged(nameof(AddTourDistance));
             }
@@ -85,6 +94,7 @@ namespace TourPlanner.UI.ViewModels
             get => _addTourEstimatedTime;
             set
             {
+                logger.Info($"AddTourEstimatedTime changed from '{_addTourEstimatedTime}' to '{value}'");
                 _addTourEstimatedTime = value;
                 OnPropertyChanged(nameof(AddTourEstimatedTime));
             }
@@ -96,6 +106,7 @@ namespace TourPlanner.UI.ViewModels
             get => _addTourImage;
             set
             {
+                logger.Info("AddTourImage changed");
                 _addTourImage = value;
                 OnPropertyChanged(nameof(AddTourImage));
             }
@@ -107,6 +118,7 @@ namespace TourPlanner.UI.ViewModels
             get => _isRouteInformationFetched;
             set
             {
+                logger.Info($"IsRouteInformationFetched changed from '{_isRouteInformationFetched}' to '{value}'");
                 _isRouteInformationFetched = value;
                 OnPropertyChanged(nameof(IsRouteInformationFetched));
             }
@@ -114,14 +126,17 @@ namespace TourPlanner.UI.ViewModels
 
         public ICommand CreateAddTourCommand { get; }
         public ICommand CancelAddTourCommand { get; }
-
         public ICommand LoadRouteInformation { get; }
 
         public AddTourViewModel(TourPlannerRepository tourPlannerManager, NavigationService navigationService)
         {
+            logger.Info("Initializing AddTourViewModel.");
+
             CreateAddTourCommand = new CreateAddTourCommand(this, tourPlannerManager, navigationService);
             CancelAddTourCommand = new CancelAddTourCommand(navigationService);
             LoadRouteInformation = new LoadRouteInformationCommand(this, tourPlannerManager);
+
+            logger.Info("AddTourViewModel initialized successfully.");
         }
     }
 }
