@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 
@@ -18,7 +18,18 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\TourPlanner.BL\TourPlanner.BL.csproj" />
+    <ProjectReference Include="..\TourPlanner.DAL\TourPlanner.DAL.csproj" />
+    <ProjectReference Include="..\TourPlanner.UI\TourPlanner.UI.csproj" />
+    <ProjectReference Include="..\TourPlanner.Utility\TourPlanner.Utility.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Using Include="NUnit.Framework" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="TestImages\" />
   </ItemGroup>
 
 </Project>

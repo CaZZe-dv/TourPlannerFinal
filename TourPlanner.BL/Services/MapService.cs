@@ -89,7 +89,7 @@ namespace TourPlanner.BL.Services
             }
         }
 
-        private (int, int) LatLongToTile(double latitude, double longitude, int zoom)
+        public (int, int) LatLongToTile(double latitude, double longitude, int zoom)
         {
             double latRad = Math.PI * latitude / 180.0;
             double n = Math.Pow(2, zoom);
@@ -98,7 +98,7 @@ namespace TourPlanner.BL.Services
             return (xTile, yTile);
         }
 
-        private (int, int) LatLongToPixel(double latitude, double longitude, int zoom)
+        public (int, int) LatLongToPixel(double latitude, double longitude, int zoom)
         {
             double latRad = Math.PI * latitude / 180.0;
             double n = Math.Pow(2, zoom) * TileSize;
