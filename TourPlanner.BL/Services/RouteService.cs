@@ -25,12 +25,12 @@ namespace TourPlanner.BL.Services
             transportTypes.Add("Driving", "driving-car");
         }
 
-        private string GetDirectionsURL(string transportType, string start, string end)
+        public string GetDirectionsURL(string transportType, string start, string end)
         {
             return $"{BASE_URL_DIRECTIONS}{transportTypes[transportType]}?api_key={API_KEY}&start={start}&end={end}";
         }
 
-        private string GetGeocodeURL(string location)
+        public string GetGeocodeURL(string location)
         {
             return $"{BASE_URL_GEOCODE}{API_KEY}&text={location}";
         }
