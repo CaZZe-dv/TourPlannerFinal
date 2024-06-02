@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using TourPlanner.BL.Models;
+using TourPlanner.BL.Services;
 using TourPlanner.DAL.Services;
 using TourPlanner.UI.Commands;
 using TourPlanner.UI.Services;
@@ -156,6 +158,9 @@ namespace TourPlanner.UI.ViewModels
             logger.Info("Executed LoadTourCommand.");
 
             LoadTourLogCommand = new LoadTourLogCommand(tourPlannerManager, this);
+
+            //Report
+            MainMenuOptionsCommand = new GetOptionsCommand(this, tourPlannerManager);
             LoadImageCommand = new LoadImageCommand(this, tourPlannerManager, sharedDataService);
         }
 
@@ -188,5 +193,25 @@ namespace TourPlanner.UI.ViewModels
                 }
             }
         }
+
+        public void GenerateReportForSelectedTour()
+        {
+            if (SelectedTour != null)
+            {
+                //_tourReportService.GenerateReportForTour(SelectedTour.Tour);
+                MessageBox.Show($"Report generated for tour: {SelectedTour.Tour.Name}");
+            }
+            else
+            {
+                MessageBox.Show("No tour selected.");
+            }
+        }
+
+        public void GenerateReportForAllTours()
+        {
+            //_tourReportService.GenerateReportForAllTours();
+            MessageBox.Show("Report generated for all tours.");
+        }
+
     }
 }

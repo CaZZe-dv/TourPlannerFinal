@@ -18,7 +18,7 @@ namespace TourPlanner.BL.Services
             // Ensure the directory exists
             if (!Directory.Exists(_imageDirectory))
             {
-                Directory.CreateDirectory(_imageDirectory);
+                //Directory.CreateDirectory(_imageDirectory);
             }
         }
 

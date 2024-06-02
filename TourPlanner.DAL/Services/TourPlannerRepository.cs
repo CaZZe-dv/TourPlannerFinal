@@ -34,6 +34,10 @@ namespace TourPlanner.DAL.Services
         {
             return await _routeService.GetRouteResponse(transportType,start,end);
         }
+        public TourPlannerRepository(ITourLog tourLogHandler)
+        {
+            _tourLogHandler = tourLogHandler;
+        }
 
         public async Task<IEnumerable<Tour>> GetAllTours()
         {

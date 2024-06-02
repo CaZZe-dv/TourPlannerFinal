@@ -20,6 +20,9 @@ namespace TourPlanner.UI
         private readonly SharedDataService _sharedDataService;
         private readonly TourPlannerRepository _tourPlannerManager;
         private readonly TourPlannerDbContextFactory _tourPlannerDbContextFactory;
+        
+        private readonly TourReportService _tourReportService;
+
         private readonly ImageService _imageService;
         private static readonly ILoggerWrapper logger = Utility.Logging.LoggerFactory.GetLogger();
 
@@ -41,10 +44,12 @@ namespace TourPlanner.UI
                 _tourPlannerDbContextFactory = new TourPlannerDbContextFactory(getDbStringFromConfigFile());
                 logger.Info("TourPlannerDbContextFactory initialized successfully.");
 
-                ITour tourHandler = new DatabaseTour(_tourPlannerDbContextFactory);
-                ITourLog tourLogHandler = new DatabaseTourLog(_tourPlannerDbContextFactory);
-                IRouteService routeService = new RouteService(getApiStringFromConfigFile());
-                IMapService mapService = new MapService();
+            _tourReportService = new TourReportService();
+
+            ITour tourHandler = new DatabaseTour(_tourPlannerDbContextFactory);
+            ITourLog tourLogHandler = new DatabaseTourLog(_tourPlannerDbContextFactory);
+            IRouteService routeService = new RouteService(getApiStringFromConfigFile());
+            IMapService mapService = new MapService();
 
                 _tourPlannerManager = new TourPlannerRepository(tourHandler, tourLogHandler, routeService, mapService, _imageService);
                 logger.Info("TourPlannerRepository initialized successfully.");
