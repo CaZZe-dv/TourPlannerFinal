@@ -107,7 +107,7 @@ namespace TourPlanner.BL.Services
             return (xPixel, yPixel);
         }
 
-        private double HaversineDistance((double latitude, double longitude) point1, (double latitude, double longitude) point2)
+        public double HaversineDistance((double latitude, double longitude) point1, (double latitude, double longitude) point2)
         {
             const double R = 6371; // Radius of the Earth in km
             double dLat = (point2.latitude - point1.latitude) * Math.PI / 180.0;
@@ -122,7 +122,7 @@ namespace TourPlanner.BL.Services
             return distance;
         }
 
-        private int CalculateZoomLevel(double distance)
+        public int CalculateZoomLevel(double distance)
         {
             if (distance < 1) return 15; // For distances less than 1 km
             else if (distance < 5) return 14;
@@ -160,7 +160,7 @@ namespace TourPlanner.BL.Services
             return ConvertBitmapToBitmapSource(mapBitmap);
         }
 
-        private (double latitude, double longitude) ParseCoordinates(string coordinatesStr)
+        public (double latitude, double longitude) ParseCoordinates(string coordinatesStr)
         {
             var parts = coordinatesStr.Split(',');
             if (parts.Length != 2)
