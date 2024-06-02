@@ -14,7 +14,7 @@ namespace TourPlanner.BL.Services
     public class TourReportService
     {
         
-        private string filePath = "C:\\Users\\nicib\\Documents\\FHTW\\4\\swen\\";
+        public string filePath = "C:\\Users\\nicib\\Documents\\FHTW\\4\\swen\\";
  
         public async Task<string> GenerateReportForTour(Tour tour)
         {

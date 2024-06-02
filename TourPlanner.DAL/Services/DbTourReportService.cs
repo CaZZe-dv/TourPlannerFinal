@@ -15,7 +15,7 @@ namespace TourPlanner.DAL.Services
     public class DbTourReportService
     {
 
-        private string filePath = "C:\\Users\\nicib\\Documents\\FHTW\\4\\swen\\";
+        public string filePath = "C:\\Users\\nicib\\Documents\\FHTW\\4\\swen\\";
 
         public DbTourReportService() { }
 
@@ -32,6 +32,13 @@ namespace TourPlanner.DAL.Services
             Debug.WriteLine(fileName);
             await GeneratePdfTest(tour, fileName);
             return fileName;
+        }
+        public async Task<string> GenerateReportTest(string filename2)
+        {
+            string filename = filename2;
+            Debug.WriteLine(filename);
+            await GeneratePdfTest(filename);
+            return filename;
         }
 
         public async Task<string> GenerateReportForAllTours(TourPlannerRepository tourPlanner)
@@ -54,7 +61,6 @@ namespace TourPlanner.DAL.Services
             document.Add(new Paragraph($"Estimated Time: {tour.EstimatedTime} hours"));
             document.Add(new Paragraph($"Transport Type: {tour.TransportType}"));
 
-            //placeholder image
             string imagePath = $"C:\\Users\\nicib\\Documents\\FHTW\\4\\swen\\TourPlannerImages\\{tour.Id}.jpg";
             ImageData imageData = ImageDataFactory.Create(imagePath);
             Image image = new Image(imageData);
@@ -77,6 +83,19 @@ namespace TourPlanner.DAL.Services
 
         }
         private async Task GeneratePdfTest(Tour tour, string fileName)
+        {
+
+            PdfWriter writer = new PdfWriter(fileName);
+            PdfDocument pdf = new PdfDocument(writer);
+            Document document = new Document(pdf);
+
+            document.Add(new Paragraph("Report for Tour"));
+
+            document.Close();
+            Debug.WriteLine("testpdf");
+
+        }
+        private async Task GeneratePdfTest(string fileName)
         {
 
             PdfWriter writer = new PdfWriter(fileName);
