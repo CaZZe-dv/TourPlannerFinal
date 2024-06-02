@@ -55,9 +55,11 @@ namespace TourPlanner.DAL.Services
             document.Add(new Paragraph($"Transport Type: {tour.TransportType}"));
 
             //placeholder image
-            string imagePath = "C:\\Users\\nicib\\source\\repos\\TourPlannerFinal\\TourPlanner.UI\\Images\\example_map_view.png";
+            string imagePath = $"C:\\Users\\nicib\\Documents\\FHTW\\4\\swen\\TourPlannerImages\\{tour.Id}.jpg";
             ImageData imageData = ImageDataFactory.Create(imagePath);
             Image image = new Image(imageData);
+            image.SetWidth(350);
+            image.SetHeight(350);
             document.Add(image);
 
             var tourLogs = await tourPlanner.GetAllTourLogs(tour);

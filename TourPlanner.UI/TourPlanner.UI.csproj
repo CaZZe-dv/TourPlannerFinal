@@ -10,7 +10,7 @@
 
   <ItemGroup>
     <PackageReference Include="GMap.NET.WindowsPresentation" Version="1.9.6" />
-    <PackageReference Include="itext7" Version="8.0.4" />
+    <PackageReference Include="itext7" Version="7.2.4" />
     <PackageReference Include="LoadingSpinner.WPF" Version="1.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />

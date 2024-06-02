@@ -39,7 +39,7 @@ namespace TourPlanner.BL.Services
 
         private async Task GeneratePdfForTour(Tour tour, string fileName)
         {
-
+            
                 PdfWriter writer = new PdfWriter(fileName);
                 PdfDocument pdf = new PdfDocument(writer);
                 Document document = new Document(pdf);
@@ -80,7 +80,7 @@ namespace TourPlanner.BL.Services
 
         private async Task GeneratePdfForAllTours(string fileName)
         {
-
+            
                 PdfWriter writer = new PdfWriter(fileName);
                 PdfDocument pdf = new PdfDocument(writer);
                 Document document = new Document(pdf);
