@@ -19,12 +19,6 @@
         <TextBox Grid.Row="1" FontSize="24" Text="{Binding Distance, ElementName=root, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"/>
         <TextBlock Grid.Row="2" Text="Estimated Time:" FontSize="24"/>
         <TextBox Grid.Row="3" FontSize="24" Text="{Binding EstimatedTime,ElementName=root, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"/>
-
-        <!-- ScrollViewer to make image scrollable -->
-        <ScrollViewer Grid.Row="4" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-            <Grid>
-                <Image Source="{Binding Image, ElementName=root}" Stretch="Uniform"/>
-            </Grid>
-        </ScrollViewer>
-    </Grid>
+        <Image Grid.Row="4" Source="{Binding Image, ElementName=root}" Stretch="Uniform"/>
+     </Grid>
 </UserControl>

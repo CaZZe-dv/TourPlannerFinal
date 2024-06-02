@@ -62,7 +62,7 @@ namespace TourPlanner.UI.Commands
         public override async Task ExecuteAsync(object? parameter)
         {
             logger.Info("Creating a new tour...");
-
+            _addTourViewModel.IsLoadingAddTour = true;
             try
             {
                 await _tourPlannerManager.AddTour(new Tour(
@@ -82,7 +82,10 @@ namespace TourPlanner.UI.Commands
                 logger.Error($"Error occurred while creating a new tour: {ex.Message}");
                 // Handle the exception
             }
-
+            finally
+            {
+                _addTourViewModel.IsLoadingAddTour = false;
+            }
             _navigationService.Navigate();
         }
     }

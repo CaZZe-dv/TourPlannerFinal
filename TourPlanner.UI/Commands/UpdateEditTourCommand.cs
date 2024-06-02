@@ -60,6 +60,7 @@ namespace TourPlanner.UI.Commands
         public override async Task ExecuteAsync(object? parameter)
         {
             logger.Info("Updating tour...");
+            _editTourViewModel.IsLoadingEditTour = true;
             try
             {
                 Tour updatedTour = new Tour(_sharedDataService.SelectedTour.Id,
@@ -79,6 +80,10 @@ namespace TourPlanner.UI.Commands
             {
                 logger.Error($"Error occurred while updating tour: {ex.Message}");
                 // Handle the exception
+            }
+            finally
+            {
+                _editTourViewModel.IsLoadingEditTour = false;
             }
         }
     }

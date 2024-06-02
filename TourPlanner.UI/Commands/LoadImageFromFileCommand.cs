@@ -23,6 +23,7 @@ namespace TourPlanner.UI.Commands
 
         public override async Task ExecuteAsync(object parameter)
         {
+            _editTourViewModel.IsLoadingEditTour = true;
             try
             {
                 logger.Info("Loading image from file...");
@@ -33,6 +34,10 @@ namespace TourPlanner.UI.Commands
             {
                 logger.Error($"Error loading image from file: {ex.Message}");
                 // Handle the exception
+            }
+            finally
+            {
+                _editTourViewModel.IsLoadingEditTour = false;
             }
         }
     }

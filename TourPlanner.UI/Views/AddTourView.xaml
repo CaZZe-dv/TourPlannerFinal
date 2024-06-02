@@ -4,51 +4,59 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:views="clr-namespace:TourPlanner.UI.Views"
+             xmlns:converters="clr-namespace:TourPlanner.UI.Converters" 
+             xmlns:loadingspinnercontrol="clr-namespace:LoadingSpinnerControl;assembly=LoadingSpinnerControl"
              mc:Ignorable="d" 
-             d:DesignHeight="600
-             " d:DesignWidth="500">
+             d:DesignHeight="600" 
+             d:DesignWidth="500">
+    <UserControl.Resources>
+        <converters:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter"/>
+    </UserControl.Resources>
     <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
         <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-            </Grid.RowDefinitions>
-            <TextBlock Grid.Row="0" Text="Name:" FontSize="24"/>
-            <TextBox Grid.Row="1" FontSize="24" Text="{Binding AddTourName, UpdateSourceTrigger=PropertyChanged}"/>
-            <TextBlock Grid.Row="2" Text="Description:" FontSize="24"/>
-            <TextBox Grid.Row="3" FontSize="24" Text="{Binding AddTourDescription, UpdateSourceTrigger=PropertyChanged}"/>
-            <StackPanel Grid.Row="4" Orientation="Horizontal" VerticalAlignment="Top">
-                <TextBlock Text="From:" Margin="10" FontSize="24"/>
-                <TextBox Text="{Binding AddTourFrom,UpdateSourceTrigger=PropertyChanged}" Width="200" Margin="10" FontSize="24"/>
-                <TextBlock Text="To:" Margin="10" FontSize="24"/>
-                <TextBox Text="{Binding AddTourTo, UpdateSourceTrigger=PropertyChanged}" Width="200" Margin="10" FontSize="24"/>
-            </StackPanel>
-            <TextBlock Grid.Row="5" Text="Transport Type:" FontSize="24"/>
-            <ComboBox Grid.Row="6" ItemsSource="{Binding TransportTypes}" SelectedItem="{Binding AddTourTransportType}" FontSize="24"/>
-            <Button Grid.Row="7" Content="Fetch Route Data" Command="{Binding LoadRouteInformation}" FontSize="24"/>
-            <views:TourInformationDisplayView Grid.Row="8" Distance="{Binding AddTourDistance}"
-                                               EstimatedTime="{Binding AddTourEstimatedTime}"
-                                                Image="{Binding AddTourImage}"/>
-            <Grid Grid.Row="9">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
+            <loadingspinnercontrol:LoadingSpinner Diameter="100" Thickness="5" Color="Black" IsLoading="{Binding IsLoadingAddTour}"/>
+            <Grid Visibility="{Binding IsLoadingAddTour, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
-                <Button Grid.Row="0" Grid.Column="0" Content="Create" FontSize="24"
-                        Command="{Binding CreateAddTourCommand}"/>
-                <Button Grid.Row="0" Grid.Column="1" Content="Cancel" FontSize="24"
-                        Command="{Binding CancelAddTourCommand}"/>
+                <TextBlock Grid.Row="0" Text="Name:" FontSize="24"/>
+                <TextBox Grid.Row="1" FontSize="24" Text="{Binding AddTourName, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock Grid.Row="2" Text="Description:" FontSize="24"/>
+                <TextBox Grid.Row="3" FontSize="24" Text="{Binding AddTourDescription, UpdateSourceTrigger=PropertyChanged}"/>
+                <StackPanel Grid.Row="4" Orientation="Horizontal" VerticalAlignment="Top">
+                    <TextBlock Text="From:" Margin="10" FontSize="24"/>
+                    <TextBox Text="{Binding AddTourFrom,UpdateSourceTrigger=PropertyChanged}" Width="200" Margin="10" FontSize="24"/>
+                    <TextBlock Text="To:" Margin="10" FontSize="24"/>
+                    <TextBox Text="{Binding AddTourTo, UpdateSourceTrigger=PropertyChanged}" Width="200" Margin="10" FontSize="24"/>
+                </StackPanel>
+                <TextBlock Grid.Row="5" Text="Transport Type:" FontSize="24"/>
+                <ComboBox Grid.Row="6" ItemsSource="{Binding TransportTypes}" SelectedItem="{Binding AddTourTransportType}" FontSize="24"/>
+                <Button Grid.Row="7" Content="Fetch Route Data" Command="{Binding LoadRouteInformation}" FontSize="24"/>
+                <views:TourInformationDisplayView Grid.Row="8" Distance="{Binding AddTourDistance}"
+                                                   EstimatedTime="{Binding AddTourEstimatedTime}"
+                                                   Image="{Binding AddTourImage}"/>
+                <Grid Grid.Row="9">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+                    <Button Grid.Row="0" Grid.Column="0" Content="Create" FontSize="24"
+                            Command="{Binding CreateAddTourCommand}"/>
+                    <Button Grid.Row="0" Grid.Column="1" Content="Cancel" FontSize="24"
+                            Command="{Binding CancelAddTourCommand}"/>
+                </Grid>
             </Grid>
         </Grid>
     </ScrollViewer>

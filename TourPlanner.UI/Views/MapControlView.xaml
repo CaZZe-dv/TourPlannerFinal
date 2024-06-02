@@ -5,13 +5,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TourPlanner.UI.Views"
              xmlns:views="clr-namespace:TourPlanner.UI.Views"
-             xmlns:converter="clr-namespace:TourPlanner.UI.Converters" xmlns:loadingspinnercontrol="clr-namespace:LoadingSpinnerControl;assembly=LoadingSpinnerControl"
+             xmlns:converters="clr-namespace:TourPlanner.UI.Converters" xmlns:loadingspinnercontrol="clr-namespace:LoadingSpinnerControl;assembly=LoadingSpinnerControl"
              mc:Ignorable="d" 
              x:Name="root"
              d:DesignHeight="450" d:DesignWidth="600">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-        <converter:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter"/>
+        <converters:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter"/>
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -36,7 +36,7 @@
         <Grid Grid.Row="3" Margin="10,10,10,10" >
             <Grid Visibility="{Binding TourIsChoosen, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <loadingspinnercontrol:LoadingSpinner Diameter="100" Thickness="5" IsLoading="{Binding IsLoadingTourLogs}" Color="Black" />
-                <ListView Visibility="{Binding IsLoading, Converter={StaticResource InverseBooleanToVisibilityConverter}}" ItemsSource="{Binding TourLogs}" SelectedItem="{Binding SelectedTourLog}">
+                <ListView Visibility="{Binding IsLoadingTourLogs, Converter={StaticResource InverseBooleanToVisibilityConverter}}" ItemsSource="{Binding TourLogs}" SelectedItem="{Binding SelectedTourLog}">
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Header="Date Time">

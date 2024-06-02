@@ -152,7 +152,7 @@ namespace TourPlanner.UI.ViewModels
             MapControlViewButtonEdit = new EditTourLogCommand(this, editTourLogNavigationService);
             MapControlViewButtonMinus = new RemoveTourLogCommand(this, tourPlannerManager);
             MapControlViewButtonPlus = new AddTourLogCommand(this, addTourLogNavigationService);
-
+            
             LoadTourCommand = new LoadTourCommand(tourPlannerManager, this);
             LoadTourCommand.Execute(null);
             logger.Info("Executed LoadTourCommand.");

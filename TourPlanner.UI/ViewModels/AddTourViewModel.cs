@@ -124,6 +124,18 @@ namespace TourPlanner.UI.ViewModels
             }
         }
 
+        private bool _isLoadingAddTour;
+        public bool IsLoadingAddTour
+        {
+            get => _isLoadingAddTour;
+            set
+            {
+                logger.Info($"IsLoadingAddTour changed from '{_isLoadingAddTour}' to '{value}'");
+                _isLoadingAddTour = value;
+                OnPropertyChanged(nameof(IsLoadingAddTour));
+            }
+        }
+
         public ICommand CreateAddTourCommand { get; }
         public ICommand CancelAddTourCommand { get; }
         public ICommand LoadRouteInformation { get; }

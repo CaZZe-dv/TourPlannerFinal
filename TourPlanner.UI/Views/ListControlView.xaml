@@ -21,7 +21,7 @@
                                 ButtonEdit="{Binding ListControlViewButtonEdit}"/>
         <Grid Grid.Row="1">
             <loadingspinnercontrol:LoadingSpinner Diameter="100" Thickness="5" Color="Black" IsLoading="{Binding IsLoadingTours}"/>
-            <ListBox Visibility="{Binding IsLoading, Converter={StaticResource InverseBooleanToVisibilityConverter}}" ItemsSource="{Binding Tours}" 
+            <ListBox Visibility="{Binding IsLoadingTours, Converter={StaticResource InverseBooleanToVisibilityConverter}}" ItemsSource="{Binding Tours}" 
                  SelectedItem="{Binding SelectedTour}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>

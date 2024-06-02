@@ -44,6 +44,7 @@ namespace TourPlanner.UI.Commands
 
         public override async Task ExecuteAsync(object parameter)
         {
+            _addTourViewModel.IsLoadingAddTour = true;
             try
             {
                 logger.Info("Loading route information...");
@@ -69,6 +70,11 @@ namespace TourPlanner.UI.Commands
                 logger.Error($"Error loading route information: {ex.Message}");
                 // Handle the exception
             }
+            finally
+            {
+                _addTourViewModel.IsLoadingAddTour = false;
+            }
+            
         }
 
         private void ResetTourInformationDisplay()

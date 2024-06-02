@@ -45,6 +45,7 @@ namespace TourPlanner.UI.Commands
         public override async Task ExecuteAsync(object parameter)
         {
             logger.Info("Fetching route information...");
+            _editTourViewModel.IsLoadingEditTour = true;
             try
             {
                 RouteResponse? routeResponse = await _tourPlannerRepository.GetRouteInformation(_editTourViewModel.EditTourTransportType,
@@ -67,6 +68,10 @@ namespace TourPlanner.UI.Commands
             catch (Exception ex)
             {
                 logger.Error($"Error fetching route information: {ex.Message}");
+            }
+            finally
+            {
+                _editTourViewModel.IsLoadingEditTour = false;
             }
             ResetTourInformationDisplay();
         }
