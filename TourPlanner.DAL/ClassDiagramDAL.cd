@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="TourPlanner.DAL.DbContexts.TourPlannerDbContext" Collapsed="true">
+    <Position X="12.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAA=</HashCode>
+      <FileName>DbContexts\TourPlannerDbContext.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TourPlanner.DAL.DbContexts.TourPlannerDbContextFactory" Collapsed="true">
+    <Position X="14.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAIAAAAAAAAAAA=</HashCode>
+      <FileName>DbContexts\TourPlannerDbContextFactory.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TourPlanner.DAL.DbContexts.TourPlannerDesignTimeDbContextFactory" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="12.5" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DbContexts\TourPlannerDesignTimeDbContextFactory.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TourPlanner.DAL.Dtos.TourDTO">
+    <Position X="19" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgASAAAAAAAgAAAAAAAAACQAAAAIAACAAAAAAAAAAAA=</HashCode>
+      <FileName>Dtos\TourDTO.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TourPlanner.DAL.Dtos.TourLogDTO">
+    <Position X="20.75" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAEAAAAAQAAEAAAAAAAAAAAAAUAAAAEAAAAAAA=</HashCode>
+      <FileName>Dtos\TourLogDTO.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TourPlanner.DAL.Services.DatabaseConverter">
+    <Position X="25.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAAAAAAACBAQAAAAAAAIAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Services\DatabaseConverter.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TourPlanner.DAL.Services.DatabaseTour">
+    <Position X="24.25" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAIIAAAAAIAIACAAAAAAAAAAAAAAAAAAAAAAAIAAA=</HashCode>
+      <FileName>Services\DatabaseTour.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="TourPlanner.DAL.Services.DatabaseTourLog">
+    <Position X="26.5" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAIABQABAAAAGAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Services\DatabaseTourLog.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="TourPlanner.DAL.Services.DbTourReportService">
+    <Position X="30.75" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAADAAQAAAAAAAAAAAAAIgAAAAAUAAAAAAAAAAAAA=</HashCode>
+      <FileName>Services\DbTourReportService.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TourPlanner.DAL.Services.SharedDataService">
+    <Position X="32.5" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAACAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAA=</HashCode>
+      <FileName>Services\SharedDataService.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TourPlanner.DAL.Services.TourPlannerRepository">
+    <Position X="29" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAQEAAABQABMAIAEAAAABAAQAAAAAAABAAQAAAAIACA=</HashCode>
+      <FileName>Services\TourPlannerRepository.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="TourPlanner.DAL.Services.ITour">
+    <Position X="29" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAIAAAAAAIAIAAAAAAAAAAAAAAAAAAAAAAAAAIAAA=</HashCode>
+      <FileName>Services\ITour.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="TourPlanner.DAL.Services.ITourLog">
+    <Position X="30.75" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAABQABAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Services\ITourLog.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
